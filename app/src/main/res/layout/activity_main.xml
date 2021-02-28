@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <View
+        android:id="@+id/viewBackground"
+        android:layout_width="match_parent"
+        android:layout_height="550dp"
+        android:layout_alignParentTop="true"
+        android:background="@color/primaryColor"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/buttonIdentifyMake"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="120dp"
+        android:fontFamily="@font/poppins_bold"
+        android:paddingLeft="40dp"
+        android:paddingTop="15dp"
+        android:paddingRight="40dp"
+        android:paddingBottom="15dp"
+        android:onClick="launchIdentifyCarMakeActivity"
+        android:text="@string/identify_the_car_make"
+        android:textColor="@color/secondaryTextColor"
+        app:backgroundTint="@color/secondaryColor"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/viewBackground" />
+
+    <Button
+        android:id="@+id/buttonHints"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:fontFamily="@font/poppins_bold"
+        android:paddingLeft="20dp"
+        android:paddingTop="15dp"
+        android:paddingRight="20dp"
+        android:paddingBottom="15dp"
+        android:text="@string/hints"
+        android:textColor="@color/secondaryTextColor"
+        app:backgroundTint="@color/secondaryColor"
+        app:layout_constraintEnd_toEndOf="@+id/buttonIdentifyMake"
+        app:layout_constraintStart_toStartOf="@+id/buttonIdentifyMake"
+        app:layout_constraintTop_toBottomOf="@+id/buttonIdentifyMake" />
+
+    <Button
+        android:id="@+id/buttonIdentifyCarImage"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:fontFamily="@font/poppins_bold"
+        android:paddingLeft="20dp"
+        android:paddingTop="15dp"
+        android:paddingRight="20dp"
+        android:paddingBottom="15dp"
+        android:text="@string/identify_the_car_image"
+        android:textColor="@color/secondaryTextColor"
+        app:backgroundTint="@color/secondaryColor"
+        app:layout_constraintEnd_toEndOf="@+id/buttonHints"
+        app:layout_constraintStart_toStartOf="@+id/buttonHints"
+        app:layout_constraintTop_toBottomOf="@+id/buttonHints" />
+
+    <Button
+        android:id="@+id/buttonAdvancedLevel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:fontFamily="@font/poppins_bold"
+        android:paddingLeft="20dp"
+        android:paddingTop="15dp"
+        android:paddingRight="20dp"
+        android:paddingBottom="15dp"
+        android:text="@string/advanced_level"
+        android:textColor="@color/secondaryTextColor"
+        app:backgroundTint="@color/secondaryColor"
+        app:layout_constraintEnd_toEndOf="@+id/buttonIdentifyCarImage"
+        app:layout_constraintStart_toStartOf="@+id/buttonIdentifyCarImage"
+        app:layout_constraintTop_toBottomOf="@+id/buttonIdentifyCarImage" />
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/switch1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins_medium"
+        android:hapticFeedbackEnabled="true"
+        android:includeFontPadding="true"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:text="@string/countdown_timer"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/viewBackground"
+        app:switchPadding="10dp"
+        android:theme="@style/Theme.SwitchTheme"
+        app:useMaterialThemeColors="true" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
