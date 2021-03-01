@@ -1,50 +1,34 @@
 package com.chandira.mad_cw01;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.content.ContextCompat;
-
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.icu.lang.UCharacter;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.Spinner;
-import android.widget.Toast;
 
-import com.google.android.material.snackbar.BaseTransientBottomBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+
 import com.google.android.material.snackbar.Snackbar;
-
-import java.util.HashMap;
-import java.util.Random;
 
 public class IdentifyCarMake extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
-    HashMap<String, Integer> cars;
     Spinner dropdownMenu;
-    int i;
+    int displayedImage;
+    Quiz quiz;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_identify_car_make);
 
-        int[] carImages = {R.drawable.audi, R.drawable.bmw, R.drawable.benz, R.drawable.nissan};
-        Random random = new Random();
-        i = random.nextInt(carImages.length);
+        quiz = new Quiz();
 
-        cars = new HashMap<>();
-        cars.put("Audi", R.drawable.audi);
-        cars.put("BMW", R.drawable.bmw);
-        cars.put("Mercedes", R.drawable.benz);
-        cars.put("Nissan", R.drawable.nissan);
-
-
+        // Display random image
         ImageView imageView = findViewById(R.id.imageViewCar);
-        imageView.setImageResource(carImages[i]);
+        displayedImage = quiz.returnRandomImage();
+        imageView.setImageResource(displayedImage);
 
         // Create spinner
         dropdownMenu = findViewById(R.id.spinnerCarMakes);
@@ -75,17 +59,42 @@ public class IdentifyCarMake extends AppCompatActivity implements AdapterView.On
     }
 
     public void handleIdentify(View view) {
-//        Toast toast = Toast.makeText(getBaseContext(), "Button clicked", Toast.LENGTH_SHORT);
-//        toast.show();
-        String selectedText = dropdownMenu.getSelectedItem().toString();
-
-//        if(selectedText == cars.get(i) {
-//
-//        }
-
         ConstraintLayout layout = findViewById(R.id.identifyCarMakeLayout);
-        Snackbar snackbar = Snackbar.make(layout, "Hello", Snackbar.LENGTH_SHORT)
-                .setTextColor(getResources().getColor(R.color.secondaryLightColor));
+        String selectedText = dropdownMenu.getSelectedItem().toString().toLowerCase();
+
+        // Check if user has selected the correct choice
+        boolean answerIsCorrect = quiz.answerIsCorrect(displayedImage, selectedText);
+
+        // Show alert accordingly
+        if (answerIsCorrect) {
+            int snackBarColor = getResources().getColor(R.color.correct);
+            showSnackBar(layout, "Correct!", snackBarColor);
+        } else {
+            int snackBarColor = getResources().getColor(R.color.incorrect);
+            Snackbar snackbar = showSnackBar(layout, "Wrong!", snackBarColor);
+            snackbar.addCallback(new Snackbar.Callback() {
+                // Once the first SnackBar times out, display the correct answer
+                @Override
+                public void onDismissed(Snackbar transientBottomBar, int event) {
+                    super.onDismissed(transientBottomBar, event);
+                    Snackbar correctAnswer = Snackbar.make(layout,
+                            "The correct answer is: " + quiz.getCorrectAnswer(displayedImage).toUpperCase(),
+                            Snackbar.LENGTH_INDEFINITE)
+                            .setTextColor(getResources().getColor(R.color.black));
+                    correctAnswer.show();
+                    View snackBarView = correctAnswer.getView();
+                    snackBarView.setBackgroundColor(getResources().getColor(R.color.secondaryLightColor));
+                }
+            });
+        }
+    }
+
+    public Snackbar showSnackBar(ConstraintLayout layout, String message, int snackBarColor) {
+        Snackbar snackbar = Snackbar.make(layout, message, Snackbar.LENGTH_SHORT)
+                .setTextColor(getResources().getColor(R.color.white));
         snackbar.show();
+        View snackBarView = snackbar.getView();
+        snackBarView.setBackgroundColor(snackBarColor);
+        return snackbar;
     }
 }
