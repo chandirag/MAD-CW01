@@ -7,6 +7,9 @@
     <string name="countdown_timer">Countdown Timer</string>
     <string name="activity1Name">Identify Car Make</string>
     <string name="identify">IDENTIFY</string>
+    <string name="next">NEXT</string>
+    <string name="activity2Name">Hints</string>
+    <string name="hintSubmit">SUBMIT</string>
 
     <string-array name="car_makes">
         <item>Mercedes</item>

@@ -9,17 +9,23 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MADCW01">
-
-        <activity android:name=".IdentifyCarMake"
-            android:label = "@string/activity1Name"
+        <activity android:name=".Hints"
+            android:label="@string/activity2Name"
             android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=
-                    "com.chandira.mad_cw01.MainActivity" />
+                android:value="com.chandira.mad_cw01.MainActivity" />
         </activity>
-
-        <activity android:name=".MainActivity"
+        <activity
+            android:name=".IdentifyCarMake"
+            android:label="@string/activity1Name"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.chandira.mad_cw01.MainActivity" />
+        </activity>
+        <activity
+            android:name=".MainActivity"
             android:theme="@style/Theme.MADCW01.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

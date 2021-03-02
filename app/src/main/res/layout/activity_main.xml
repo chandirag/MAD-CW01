@@ -46,6 +46,7 @@
         android:paddingRight="20dp"
         android:paddingBottom="15dp"
         android:text="@string/hints"
+        android:onClick="launchHintActivity"
         android:textColor="@color/secondaryTextColor"
         app:backgroundTint="@color/secondaryColor"
         app:layout_constraintEnd_toEndOf="@+id/buttonIdentifyMake"

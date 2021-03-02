@@ -25,4 +25,9 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
         Log.d(LOG_TAG, "Activity: Identify-Car-Make Launched!");
     }
+
+    public void launchHintActivity(View view) {
+        Intent intent = new Intent(this, Hints.class);
+        startActivity(intent);
+    }
 }
