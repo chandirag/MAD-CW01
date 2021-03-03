@@ -1,5 +1,6 @@
 package com.chandira.mad_cw01;
 
+import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -19,6 +20,38 @@ public class Quiz implements Parcelable {
         cars.put(R.drawable.benz, "mercedes");
         cars.put(R.drawable.nissan, "nissan");
     }
+
+    public int returnRandomImage() {
+        Random random = new Random();
+        int i = random.nextInt(carImages.length);
+        return carImages[i];
+    }
+
+    public String returnRandomCarMake(Context context) {
+        Random random = new Random();
+        String[] carMakes = context.getResources().getStringArray(R.array.car_makes);
+        int i = random.nextInt(carMakes.length);
+        return carMakes[i];
+    }
+
+    public boolean answerIsCorrect(int displayedImage, String userChoice) {
+        String carMake = cars.get(displayedImage);
+        assert carMake != null;
+        return carMake.equalsIgnoreCase(userChoice);
+    }
+
+    public String getCorrectAnswer(int displayedImage) {
+        return cars.get(displayedImage);
+    }
+
+
+
+
+
+
+
+
+
 
 
     protected Quiz(Parcel in) {
@@ -47,20 +80,4 @@ public class Quiz implements Parcelable {
             return new Quiz[size];
         }
     };
-
-    public int returnRandomImage() {
-        Random random = new Random();
-        int i = random.nextInt(carImages.length);
-        return carImages[i];
-    }
-
-    public boolean answerIsCorrect(int displayedImage, String userChoice) {
-        String carMake = cars.get(displayedImage);
-        assert carMake != null;
-        return carMake.equalsIgnoreCase(userChoice);
-    }
-
-    public String getCorrectAnswer(int displayedImage) {
-        return cars.get(displayedImage);
-    }
 }

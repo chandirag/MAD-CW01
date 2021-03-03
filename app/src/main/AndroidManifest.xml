@@ -9,13 +9,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MADCW01">
-        <activity android:name=".Hints"
-            android:label="@string/activity2Name"
-            android:parentActivityName=".MainActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.chandira.mad_cw01.MainActivity" />
+        <!-- Home Screen -->
+        <activity
+            android:name=".MainActivity"
+            android:theme="@style/Theme.MADCW01.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
+
+        <!-- View 1: Identify Car Make -->
         <activity
             android:name=".IdentifyCarMake"
             android:label="@string/activity1Name"
@@ -24,14 +29,38 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.chandira.mad_cw01.MainActivity" />
         </activity>
+
+        <!-- View 2: Hints -->
         <activity
-            android:name=".MainActivity"
-            android:theme="@style/Theme.MADCW01.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            android:name=".Hints"
+            android:label="@string/activity2Name"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.chandira.mad_cw01.MainActivity" />
         </activity>
+
+        <!-- View 3: Identify Car Image -->
+        <activity
+            android:name=".IdentifyCarImage"
+            android:label="@string/activity3Name"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.chandira.mad_cw01.MainActivity" />
+        </activity>
+
+        <!-- View 4: Advanced Level -->
+        <activity
+            android:name=".AdvancedLevel"
+            android:label="@string/activity4Name"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.chandira.mad_cw01.MainActivity" />
+
+        </activity>
+
 
         <meta-data
             android:name="preloaded_fonts"

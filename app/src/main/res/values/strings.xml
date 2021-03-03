@@ -10,6 +10,9 @@
     <string name="next">NEXT</string>
     <string name="activity2Name">Hints</string>
     <string name="hintSubmit">SUBMIT</string>
+    <string name="activity3Name">Identify Car Image</string>
+    <string name="activity4Name">Advanced Level</string>
+    <string name="identifyCarImageInstructions">Click on the image corresponding to the below displayed car make:</string>
 
     <string-array name="car_makes">
         <item>Mercedes</item>

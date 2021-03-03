@@ -23,11 +23,20 @@ public class MainActivity extends AppCompatActivity {
     public void launchIdentifyCarMakeActivity(View view) {
         Intent intent = new Intent(this, IdentifyCarMake.class);
         startActivity(intent);
-        Log.d(LOG_TAG, "Activity: Identify-Car-Make Launched!");
     }
 
     public void launchHintActivity(View view) {
         Intent intent = new Intent(this, Hints.class);
+        startActivity(intent);
+    }
+
+    public void launchIdentifyCarImageActivity(View view) {
+        Intent intent = new Intent(this, IdentifyCarImage.class);
+        startActivity(intent);
+    }
+
+    public void launchAdvancedLevelActivity(View view) {
+        Intent intent = new Intent(this, AdvancedLevel.class);
         startActivity(intent);
     }
 }
