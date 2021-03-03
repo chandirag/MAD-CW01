@@ -1,15 +1,14 @@
 package com.chandira.mad_cw01;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.google.android.material.snackbar.Snackbar;
 
@@ -27,6 +26,9 @@ public class AdvancedLevel extends AppCompatActivity {
     EditText editText2;
     EditText editText3;
     int submitCount = 0;
+    int points = 0;
+    TextView textViewPoints;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +39,7 @@ public class AdvancedLevel extends AppCompatActivity {
     }
 
     public void onCreateHelper() {
+        textViewPoints = findViewById(R.id.textViewPoints);
         buttonSubmit = findViewById(R.id.buttonSubmit);
 
         imageView1 = findViewById(R.id.imageView1);
@@ -45,12 +48,12 @@ public class AdvancedLevel extends AppCompatActivity {
 
         image1ResID = quiz.returnRandomImage();
         image2ResID = quiz.returnRandomImage();
-        while(image1ResID == image2ResID) {
+        while (image1ResID == image2ResID) {
             // If image2 is the same as image1 pick new image as image2
             image2ResID = quiz.returnRandomImage();
         }
         image3ResID = quiz.returnRandomImage();
-        while(image3ResID == image2ResID || image3ResID == image1ResID) {
+        while (image3ResID == image2ResID || image3ResID == image1ResID) {
             // If image3 is the same as (image1 OR image2) pick new image as image3
             image3ResID = quiz.returnRandomImage();
         }
@@ -77,29 +80,53 @@ public class AdvancedLevel extends AppCompatActivity {
         String userInput2 = editText2.getText().toString();
         String userInput3 = editText3.getText().toString();
 
-        if(buttonSubmit.getText().toString().equalsIgnoreCase("SUBMIT")) {
+        if (buttonSubmit.getText().toString().equalsIgnoreCase("SUBMIT")) {
             submitCount++;
             boolean answer1 = checkAnswer(quiz, editText1, image1ResID, userInput1);
             boolean answer2 = checkAnswer(quiz, editText2, image2ResID, userInput2);
             boolean answer3 = checkAnswer(quiz, editText3, image3ResID, userInput3);
+            boolean[] answers = {answer1, answer2, answer3};
 
             if (submitCount < 3 && (answer1 && answer2 && answer3)) {
                 showSnackBar(layout, "Correct!", getResources().getColor(R.color.correct));
                 buttonSubmit.setText("NEXT");
+                for(boolean answer: answers) {
+                    if (answer) {
+                        points++;
+                    }
+                }
             } else if (submitCount == 3 && (answer1 && answer2 && answer3)) {
                 showSnackBar(layout, "Correct!", getResources().getColor(R.color.correct));
                 buttonSubmit.setText("NEXT");
+                for(boolean answer: answers) {
+                    if (answer) {
+                        points++;
+                    }
+                }
             } else if (submitCount == 3) {
                 showSnackBar(layout, "Wrong!", getResources().getColor(R.color.incorrect));
                 buttonSubmit.setText("NEXT");
+                for(boolean answer: answers) {
+                    if (answer) {
+                        points++;
+                    }
+                }
             }
+            String pointsString = "" + points;
+            textViewPoints.setText(pointsString);
         } else {
             submitCount = 0;
             onCreateHelper();
 
-            editText1.setText(""); editText1.setEnabled(true); editText1.setTextColor(getResources().getColor(R.color.black));
-            editText2.setText(""); editText2.setEnabled(true); editText2.setTextColor(getResources().getColor(R.color.black));
-            editText3.setText(""); editText3.setEnabled(true); editText3.setTextColor(getResources().getColor(R.color.black));
+            editText1.setText("");
+            editText1.setEnabled(true);
+            editText1.setTextColor(getResources().getColor(R.color.black));
+            editText2.setText("");
+            editText2.setEnabled(true);
+            editText2.setTextColor(getResources().getColor(R.color.black));
+            editText3.setText("");
+            editText3.setEnabled(true);
+            editText3.setTextColor(getResources().getColor(R.color.black));
             buttonSubmit.setText("SUBMIT");
         }
     }
