@@ -13,6 +13,8 @@
     <string name="activity3Name">Identify Car Image</string>
     <string name="activity4Name">Advanced Level</string>
     <string name="identifyCarImageInstructions">Click on the image corresponding to the below displayed car make:</string>
+    <string name="submit">SUBMIT</string>
+    <string name="advancedLevelInstructions">Guess the 3 car manufacturers and enter details using the text boxes.</string>
 
     <string-array name="car_makes">
         <item>Mercedes</item>
