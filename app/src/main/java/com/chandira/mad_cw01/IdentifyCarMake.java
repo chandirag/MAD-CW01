@@ -74,8 +74,6 @@ public class IdentifyCarMake extends AppCompatActivity implements AdapterView.On
             button.setText("NEXT");
         } else {
             previousImage = displayedImage;
-//            finish();
-//            startActivity(getIntent());
             onCreateHelper();
         }
     }
