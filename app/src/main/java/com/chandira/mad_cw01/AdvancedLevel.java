@@ -13,21 +13,18 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import com.google.android.material.snackbar.Snackbar;
 
 public class AdvancedLevel extends AppCompatActivity {
+    // TODO: Points only update after 3 tries are up
+    // TODO: Yellow label which shows the correct answers appear under all 3 car makes
+    //  (Even if the use entered the correct answer)
 
-    Quiz quiz = new Quiz();
-    int image1ResID;
-    int image2ResID;
-    int image3ResID;
-    Button buttonSubmit;
-    ImageView imageView1;
-    ImageView imageView2;
-    ImageView imageView3;
-    EditText editText1;
-    EditText editText2;
-    EditText editText3;
-    int submitCount = 0;
-    int points = 0;
-    TextView textViewPoints;
+    private int image1ResID;
+    private int image2ResID;
+    private int image3ResID;
+    private int submitCount = 0;
+    private int points = 0;
+    private Button buttonSubmit;
+    private TextView textViewPoints;
+    private final Quiz quiz = new Quiz();
 
 
     @Override
@@ -42,9 +39,9 @@ public class AdvancedLevel extends AppCompatActivity {
         textViewPoints = findViewById(R.id.textViewPoints);
         buttonSubmit = findViewById(R.id.buttonSubmit);
 
-        imageView1 = findViewById(R.id.imageView1);
-        imageView2 = findViewById(R.id.imageView2);
-        imageView3 = findViewById(R.id.imageView3);
+        ImageView imageView1 = findViewById(R.id.imageView1);
+        ImageView imageView2 = findViewById(R.id.imageView2);
+        ImageView imageView3 = findViewById(R.id.imageView3);
 
         image1ResID = quiz.returnRandomImage();
         image2ResID = quiz.returnRandomImage();
@@ -67,14 +64,27 @@ public class AdvancedLevel extends AppCompatActivity {
         imageView1.setTag(image1ResID);
         imageView2.setTag(image2ResID);
         imageView3.setTag(image3ResID);
+
+        TextView correctAnswer1 = findViewById(R.id.textCorrectAnswer1);
+        TextView correctAnswer2 = findViewById(R.id.textCorrectAnswer2);
+        TextView correctAnswer3 = findViewById(R.id.textCorrectAnswer3);
+
+        correctAnswer1.setVisibility(View.INVISIBLE);
+        correctAnswer2.setVisibility(View.INVISIBLE);
+        correctAnswer3.setVisibility(View.INVISIBLE);
+
+        correctAnswer1.setText(quiz.cars.get(image1ResID).toUpperCase());
+        correctAnswer2.setText(quiz.cars.get(image2ResID).toUpperCase());
+        correctAnswer3.setText(quiz.cars.get(image3ResID).toUpperCase());
+
     }
 
 
     public void handleSubmit(View view) {
         ConstraintLayout layout = findViewById(R.id.advancedLevelLayout);
-        editText1 = findViewById(R.id.editText1);
-        editText2 = findViewById(R.id.editText2);
-        editText3 = findViewById(R.id.editText3);
+        EditText editText1 = findViewById(R.id.editText1);
+        EditText editText2 = findViewById(R.id.editText2);
+        EditText editText3 = findViewById(R.id.editText3);
 
         String userInput1 = editText1.getText().toString();
         String userInput2 = editText2.getText().toString();
@@ -89,7 +99,7 @@ public class AdvancedLevel extends AppCompatActivity {
 
             if (submitCount < 3 && (answer1 && answer2 && answer3)) {
                 showSnackBar(layout, "Correct!", getResources().getColor(R.color.correct));
-                buttonSubmit.setText("NEXT");
+                buttonSubmit.setText(R.string.next);
                 for(boolean answer: answers) {
                     if (answer) {
                         points++;
@@ -97,7 +107,7 @@ public class AdvancedLevel extends AppCompatActivity {
                 }
             } else if (submitCount == 3 && (answer1 && answer2 && answer3)) {
                 showSnackBar(layout, "Correct!", getResources().getColor(R.color.correct));
-                buttonSubmit.setText("NEXT");
+                buttonSubmit.setText(R.string.next);
                 for(boolean answer: answers) {
                     if (answer) {
                         points++;
@@ -105,7 +115,7 @@ public class AdvancedLevel extends AppCompatActivity {
                 }
             } else if (submitCount == 3) {
                 showSnackBar(layout, "Wrong!", getResources().getColor(R.color.incorrect));
-                buttonSubmit.setText("NEXT");
+                buttonSubmit.setText(R.string.next);
                 for(boolean answer: answers) {
                     if (answer) {
                         points++;
@@ -114,6 +124,7 @@ public class AdvancedLevel extends AppCompatActivity {
             }
             String pointsString = "" + points;
             textViewPoints.setText(pointsString);
+
         } else {
             submitCount = 0;
             onCreateHelper();
@@ -127,7 +138,7 @@ public class AdvancedLevel extends AppCompatActivity {
             editText3.setText("");
             editText3.setEnabled(true);
             editText3.setTextColor(getResources().getColor(R.color.black));
-            buttonSubmit.setText("SUBMIT");
+            buttonSubmit.setText(R.string.submit);
         }
     }
 
@@ -141,7 +152,6 @@ public class AdvancedLevel extends AppCompatActivity {
     }
 
     private boolean checkAnswer(Quiz quiz, EditText editText, int imageResID, String userInput) {
-
         if (userInput.trim().equals("")) {
             return false;
         }

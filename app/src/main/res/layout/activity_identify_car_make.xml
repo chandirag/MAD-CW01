@@ -33,8 +33,6 @@
         android:paddingBottom="15dp"
         android:text="@string/identify"
         android:onClick="handleIdentify"
-        android:textColor="@color/secondaryTextColor"
-        app:backgroundTint="@color/secondaryColor"
         app:layout_constraintEnd_toEndOf="@+id/spinnerCarMakes"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/spinnerCarMakes"

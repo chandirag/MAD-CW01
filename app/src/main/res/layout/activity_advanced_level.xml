@@ -63,8 +63,8 @@
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:ems="10"
-        android:inputType="textPersonName"
         android:hint="Enter the car make"
+        android:inputType="textPersonName"
         app:layout_constraintBottom_toBottomOf="@+id/imageView1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imageView1"
@@ -137,6 +137,36 @@
         android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textCorrectAnswer1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins_bold"
+        android:text=""
+        android:textColor="@color/secondaryColor"
+        app:layout_constraintStart_toStartOf="@+id/editText1"
+        app:layout_constraintTop_toBottomOf="@+id/editText1" />
+
+    <TextView
+        android:id="@+id/textCorrectAnswer2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins_bold"
+        android:text=""
+        android:textColor="@color/secondaryColor"
+        app:layout_constraintStart_toStartOf="@+id/editText2"
+        app:layout_constraintTop_toBottomOf="@+id/editText2" />
+
+    <TextView
+        android:id="@+id/textCorrectAnswer3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins_bold"
+        android:text=""
+        android:textColor="@color/secondaryColor"
+        app:layout_constraintStart_toStartOf="@+id/editText3"
+        app:layout_constraintTop_toBottomOf="@+id/editText3" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

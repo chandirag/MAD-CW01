@@ -8,9 +8,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-public class Quiz implements Parcelable {
+public class Quiz {
+    // TODO: Make fields private and create getters & setters
 
-    private int[] carImages = {R.drawable.audi, R.drawable.bmw, R.drawable.benz, R.drawable.nissan};
+    private final int[] carImages = {R.drawable.audi, R.drawable.bmw, R.drawable.benz, R.drawable.nissan};
     Map<Integer, String> cars;
 
     public Quiz() {
@@ -43,41 +44,4 @@ public class Quiz implements Parcelable {
     public String getCorrectAnswer(int displayedImage) {
         return cars.get(displayedImage);
     }
-
-
-
-
-
-
-
-
-
-
-
-    protected Quiz(Parcel in) {
-        carImages = in.createIntArray();
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeIntArray(carImages);
-        dest.writeMap(cars);
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    public static final Creator<Quiz> CREATOR = new Creator<Quiz>() {
-        @Override
-        public Quiz createFromParcel(Parcel in) {
-            return new Quiz(in);
-        }
-
-        @Override
-        public Quiz[] newArray(int size) {
-            return new Quiz[size];
-        }
-    };
 }
