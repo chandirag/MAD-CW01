@@ -40,9 +40,10 @@ public class IdentifyCarMake extends AppCompatActivity implements AdapterView.On
     private void onCreateHelper() {
         button = findViewById(R.id.buttonIdentifyCarMake);
 
-        // Apple color state to button
+        // Apply color state to button
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            button.setBackgroundTintList(getApplicationContext().getResources().getColorStateList(R.color.button_color));
+            button.setBackgroundTintList(
+                    getApplicationContext().getResources().getColorStateList(R.color.button_color));
         }
 
         // Display random image
@@ -88,7 +89,7 @@ public class IdentifyCarMake extends AppCompatActivity implements AdapterView.On
                 int snackBarColor = getResources().getColor(R.color.correct);
                 showSnackBar(layout, "Correct!", snackBarColor);
             } else {
-                button.setEnabled(false);
+                button.setEnabled(false); // Disable button until correct car make is shown
                 int snackBarColor = getResources().getColor(R.color.incorrect);
                 Snackbar snackbar = showSnackBar(layout, "Wrong!", snackBarColor);
                 snackbar.addCallback(new Snackbar.Callback() {
@@ -102,7 +103,7 @@ public class IdentifyCarMake extends AppCompatActivity implements AdapterView.On
                         correctAnswer.setTextColor(getResources().getColor(R.color.black));
                         correctAnswer.getView().setBackgroundColor(getResources().getColor(R.color.secondaryLightColor));
                         Button button = IdentifyCarMake.this.button;
-                        button.setEnabled(true);
+                        button.setEnabled(true); // Re-enable button
                     }
                 });
             }
@@ -111,8 +112,6 @@ public class IdentifyCarMake extends AppCompatActivity implements AdapterView.On
             onCreateHelper();
         }
     }
-
-
 
     // Utility method to create SnackBar
     private Snackbar showSnackBar(ConstraintLayout layout, String message, int snackBarColor) {

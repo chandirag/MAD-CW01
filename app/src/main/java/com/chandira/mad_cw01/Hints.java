@@ -1,5 +1,6 @@
 package com.chandira.mad_cw01;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.View;
@@ -16,8 +17,6 @@ import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
 
 public class Hints extends AppCompatActivity {
-    // TODO: Fix issue where repeating a correct letter multiple times shows "Correct!" snackBar.
-    // TODO: Fix issue where pressing next before Correct answer is displayed reveals answer for the new image.
 
     private int incorrectGuesses = 0;
     private int correctGuesses = 0;
@@ -27,36 +26,46 @@ public class Hints extends AppCompatActivity {
     private Button button;
     private EditText userInput;
     private ArrayList<String> lettersInCarMake;
+    private ArrayList<String> lettersGuessed;
     private final Quiz quiz = new Quiz();
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hints);
-
         onCreateHelper();
     }
 
+    // Helper method to select new image and change ImageView
     public void onCreateHelper() {
-        button = findViewById(R.id.submitCharacter);
-        userInput = findViewById(R.id.textHangmanUserInput);
-        userInput.setEnabled(true);
         correctGuesses = 0;
         incorrectGuesses = 0;
+
+        button = findViewById(R.id.submitCharacter);
+        userInput = findViewById(R.id.textHangmanUserInput);
         linearLayout = findViewById(R.id.linearLayout);
-
         ImageView imageView = findViewById(R.id.imageViewCar);
-        displayedImage = quiz.returnRandomImage();
 
+        userInput.setEnabled(true);
+
+        // Apply color state to button
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            button.setBackgroundTintList(
+                    getApplicationContext().getResources().getColorStateList(R.color.button_color));
+        }
+
+        // Display random image
+        displayedImage = quiz.returnRandomImage();
         while (previousImage == displayedImage) {
             displayedImage = quiz.returnRandomImage();
         }
         imageView.setImageResource(displayedImage);
         button.setText(R.string.submit);
 
+        // Display a number of disabled TextViews according to the number of letters
+        // in car make
         lettersInCarMake = new ArrayList<>();
+        lettersGuessed = new ArrayList<>();
         int count = quiz.cars.get(displayedImage).length();
         for (int i = 0; i < count; i++) {
             addEditText(i);
@@ -64,27 +73,40 @@ public class Hints extends AppCompatActivity {
         }
     }
 
-
+    // OnClick handler for button
     public void handleHintButtonClick(View view) {
         if (button.getText().toString().equalsIgnoreCase("SUBMIT")) {
             ConstraintLayout layout = findViewById(R.id.hintLayout);
             userInput = findViewById(R.id.textHangmanUserInput);
             String input = userInput.getText().toString().toUpperCase();
             boolean isGuessCorrect = false;
-            for (int y = 0; y <= lettersInCarMake.size() - 1; y++) {
-                if (input.equalsIgnoreCase(lettersInCarMake.get(y))) {
-                    EditText editText = findViewById(R.id.hintText + y);
-                    editText.setText(lettersInCarMake.get(y).toUpperCase());
-                    isGuessCorrect = true;
-                    correctGuesses++;
+
+            // Check if inputted letter exists in lettersGuessed
+            // If not:
+            if (!lettersGuessed.contains(input)) {
+                // Find and update TextViews if the input is correct
+                for (int y = 0; y <= lettersInCarMake.size() - 1; y++) {
+                    if (input.equalsIgnoreCase(lettersInCarMake.get(y))) {
+                        EditText editText = findViewById(R.id.hintText + y);
+                        editText.setText(lettersInCarMake.get(y).toUpperCase());
+                        lettersGuessed.add(input); // Add the letter to lettersGuessed
+                        correctGuesses++; // Increment no. of correct guesses
+                        isGuessCorrect = true;
+                    }
                 }
+            } else {
+                // If it does exist: Do nothing
+                isGuessCorrect = true;
             }
+
             if (!isGuessCorrect) incorrectGuesses++;
+
             if (correctGuesses == lettersInCarMake.size()) {
                 showSnackBar(layout, "Correct!", getResources().getColor(R.color.correct));
                 userInput.setEnabled(false);
                 button.setText(R.string.next);
             } else if (incorrectGuesses >= 3) {
+                button.setEnabled(false);
                 Snackbar snackbar = showSnackBar(layout, "Wrong!", getResources().getColor(R.color.incorrect));
                 snackbar.addCallback(new Snackbar.Callback() {
                     // Once the first SnackBar times out, display the correct answer
@@ -98,15 +120,17 @@ public class Hints extends AppCompatActivity {
                         correctAnswer.show();
                         View snackBarView = correctAnswer.getView();
                         snackBarView.setBackgroundColor(getResources().getColor(R.color.secondaryLightColor));
+                        Button button = Hints.this.button;
+                        button.setEnabled(true);
                     }
                 });
                 userInput.setEnabled(false);
                 button.setText(R.string.next);
             }
-            userInput.setText("");
+            userInput.setText(""); // Clear TextView
         } else {
             previousImage = displayedImage;
-            linearLayout.removeAllViews();
+            linearLayout.removeAllViews(); // Remove the TextViews
             onCreateHelper();
         }
     }
