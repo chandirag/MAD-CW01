@@ -12,7 +12,7 @@ public class Quiz {
     // TODO: Make fields private and create getters & setters
 
     private final int[] carImages = {R.drawable.audi, R.drawable.bmw, R.drawable.benz, R.drawable.nissan};
-    Map<Integer, String> cars;
+    private Map<Integer, String> cars;
 
     public Quiz() {
         cars = new HashMap<>();
@@ -20,6 +20,14 @@ public class Quiz {
         cars.put(R.drawable.bmw, "bmw");
         cars.put(R.drawable.benz, "mercedes");
         cars.put(R.drawable.nissan, "nissan");
+    }
+
+    public Map<Integer, String> getCars() {
+        return cars;
+    }
+
+    public void setCars(Map<Integer, String> cars) {
+        this.cars = cars;
     }
 
     public int returnRandomImage() {

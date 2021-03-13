@@ -89,7 +89,7 @@ public class IdentifyCarMake extends AppCompatActivity implements AdapterView.On
                 int snackBarColor = getResources().getColor(R.color.correct);
                 showSnackBar(layout, "Correct!", snackBarColor);
             } else {
-                button.setEnabled(false); // Disable button until correct car make is shown
+                button.setEnabled(false); // Disable button until correct answer is shown
                 int snackBarColor = getResources().getColor(R.color.incorrect);
                 Snackbar snackbar = showSnackBar(layout, "Wrong!", snackBarColor);
                 snackbar.addCallback(new Snackbar.Callback() {

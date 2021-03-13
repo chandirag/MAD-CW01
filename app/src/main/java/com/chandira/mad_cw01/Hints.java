@@ -66,10 +66,10 @@ public class Hints extends AppCompatActivity {
         // in car make
         lettersInCarMake = new ArrayList<>();
         lettersGuessed = new ArrayList<>();
-        int count = quiz.cars.get(displayedImage).length();
+        int count = quiz.getCars().get(displayedImage).length();
         for (int i = 0; i < count; i++) {
             addEditText(i);
-            lettersInCarMake.add(quiz.cars.get(displayedImage).substring(i, i + 1).toUpperCase());
+            lettersInCarMake.add(quiz.getCars().get(displayedImage).substring(i, i + 1).toUpperCase());
         }
     }
 
@@ -84,7 +84,7 @@ public class Hints extends AppCompatActivity {
             // Check if inputted letter exists in lettersGuessed
             // If not:
             if (!lettersGuessed.contains(input)) {
-                // Find and update TextViews if the input is correct
+                // Find and update EditTexts if the input is correct
                 for (int y = 0; y <= lettersInCarMake.size() - 1; y++) {
                     if (input.equalsIgnoreCase(lettersInCarMake.get(y))) {
                         EditText editText = findViewById(R.id.hintText + y);
@@ -127,14 +127,15 @@ public class Hints extends AppCompatActivity {
                 userInput.setEnabled(false);
                 button.setText(R.string.next);
             }
-            userInput.setText(""); // Clear TextView
+            userInput.setText(""); // Clear EditText
         } else {
             previousImage = displayedImage;
-            linearLayout.removeAllViews(); // Remove the TextViews
+            linearLayout.removeAllViews(); // Remove the EditTexts
             onCreateHelper();
         }
     }
 
+    // Utility method to add an EditText
     private void addEditText(int number) {
         EditText editText = new EditText(Hints.this);
         editText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 30);
@@ -144,6 +145,7 @@ public class Hints extends AppCompatActivity {
         linearLayout.addView(editText);
     }
 
+    // Utility method to create SnackBar
     public Snackbar showSnackBar(ConstraintLayout layout, String message, int snackBarColor) {
         Snackbar snackbar = Snackbar.make(layout, message, Snackbar.LENGTH_SHORT)
                 .setTextColor(getResources().getColor(R.color.white));

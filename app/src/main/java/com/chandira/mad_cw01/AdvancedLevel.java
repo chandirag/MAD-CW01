@@ -14,8 +14,6 @@ import com.google.android.material.snackbar.Snackbar;
 
 public class AdvancedLevel extends AppCompatActivity {
     // TODO: Points only update after 3 tries are up
-    // TODO: Yellow label which shows the correct answers appear under all 3 car makes
-    //  (Even if the use entered the correct answer)
 
     private int image1ResID;
     private int image2ResID;
@@ -24,6 +22,9 @@ public class AdvancedLevel extends AppCompatActivity {
     private int points = 0;
     private Button buttonSubmit;
     private TextView textViewPoints;
+    private TextView correctAnswer1;
+    private TextView correctAnswer2;
+    private TextView correctAnswer3;
     private final Quiz quiz = new Quiz();
 
 
@@ -65,18 +66,18 @@ public class AdvancedLevel extends AppCompatActivity {
         imageView2.setTag(image2ResID);
         imageView3.setTag(image3ResID);
 
-        TextView correctAnswer1 = findViewById(R.id.textCorrectAnswer1);
-        TextView correctAnswer2 = findViewById(R.id.textCorrectAnswer2);
-        TextView correctAnswer3 = findViewById(R.id.textCorrectAnswer3);
+        // Create TextViews with the correct answer and hide it initially
+        correctAnswer1 = findViewById(R.id.textCorrectAnswer1);
+        correctAnswer2 = findViewById(R.id.textCorrectAnswer2);
+        correctAnswer3 = findViewById(R.id.textCorrectAnswer3);
 
         correctAnswer1.setVisibility(View.INVISIBLE);
         correctAnswer2.setVisibility(View.INVISIBLE);
         correctAnswer3.setVisibility(View.INVISIBLE);
 
-        correctAnswer1.setText(quiz.cars.get(image1ResID).toUpperCase());
-        correctAnswer2.setText(quiz.cars.get(image2ResID).toUpperCase());
-        correctAnswer3.setText(quiz.cars.get(image3ResID).toUpperCase());
-
+        correctAnswer1.setText(quiz.getCars().get(image1ResID).toUpperCase());
+        correctAnswer2.setText(quiz.getCars().get(image2ResID).toUpperCase());
+        correctAnswer3.setText(quiz.getCars().get(image3ResID).toUpperCase());
     }
 
 
@@ -96,16 +97,9 @@ public class AdvancedLevel extends AppCompatActivity {
             boolean answer2 = checkAnswer(quiz, editText2, image2ResID, userInput2);
             boolean answer3 = checkAnswer(quiz, editText3, image3ResID, userInput3);
             boolean[] answers = {answer1, answer2, answer3};
+            TextView[] textViews = {correctAnswer1, correctAnswer2, correctAnswer3};
 
-            if (submitCount < 3 && (answer1 && answer2 && answer3)) {
-                showSnackBar(layout, "Correct!", getResources().getColor(R.color.correct));
-                buttonSubmit.setText(R.string.next);
-                for(boolean answer: answers) {
-                    if (answer) {
-                        points++;
-                    }
-                }
-            } else if (submitCount == 3 && (answer1 && answer2 && answer3)) {
+            if (submitCount <= 3 && (answer1 && answer2 && answer3)) {
                 showSnackBar(layout, "Correct!", getResources().getColor(R.color.correct));
                 buttonSubmit.setText(R.string.next);
                 for(boolean answer: answers) {
@@ -116,9 +110,13 @@ public class AdvancedLevel extends AppCompatActivity {
             } else if (submitCount == 3) {
                 showSnackBar(layout, "Wrong!", getResources().getColor(R.color.incorrect));
                 buttonSubmit.setText(R.string.next);
-                for(boolean answer: answers) {
-                    if (answer) {
+                for(int i = 0; i < answers.length; i++) {
+                    if (answers[i]) {
                         points++;
+                    } else {
+                        // If the answer is incorrect, display the correct answer
+                        TextView textView = textViews[i];
+                        textView.setVisibility(View.VISIBLE);
                     }
                 }
             }
@@ -152,9 +150,7 @@ public class AdvancedLevel extends AppCompatActivity {
     }
 
     private boolean checkAnswer(Quiz quiz, EditText editText, int imageResID, String userInput) {
-        if (userInput.trim().equals("")) {
-            return false;
-        }
+        if (userInput.trim().equals("")) { return false; }
 
         if (quiz.answerIsCorrect(imageResID, userInput.trim())) {
             editText.setEnabled(false);
