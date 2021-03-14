@@ -41,30 +41,18 @@ public class IdentifyCarMake extends AppCompatActivity implements AdapterView.On
 
         countdownText = findViewById(R.id.timerText);
 
+        startTimer();
+
         SharedPreferences state = getSharedPreferences("preferences", 0);
         boolean switchState = state.getBoolean("switchState", false);
         if (switchState) {
-            startTimer();
+            countDownTimer.start();
         } else {
             countdownText.setVisibility(View.INVISIBLE);
         }
 
-//        if (getIntent().getExtras() != null) {
-//            timerState = getIntent().getBooleanExtra("switchState", false);
-//            if (timerState)
-//                startTimer();
-//            else
-//
-//        } else {
-//            countdownText.setVisibility(View.INVISIBLE);
-//        }
-//        Timer timer = new Timer(21000);
-//        timer.startTimer(handleIdentify());
-
         button = findViewById(R.id.buttonIdentifyCarMake);
         button.setOnClickListener(v -> handleIdentify());
-
-
 
         onCreateHelper();
     }
@@ -99,28 +87,10 @@ public class IdentifyCarMake extends AppCompatActivity implements AdapterView.On
         countdownText.setText(timeLeftText);
     }
 
-//    @Override
-//    public void onBackPressed() {
-//        super.onBackPressed();
-//        Intent intent = new Intent();
-//        intent.putExtra("switchState", true);
-//        setResult(RESULT_OK, intent);
-//        finish();
-//    }
-
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) { }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) { }
-
     // Helper method to select new image and change ImageView
     private void onCreateHelper() {
-
+        // Reset the timer
         countDownTimer.start();
-
-
-        button = findViewById(R.id.buttonIdentifyCarMake);
 
         // Apply color state to button
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -142,6 +112,7 @@ public class IdentifyCarMake extends AppCompatActivity implements AdapterView.On
         if (dropdownMenu != null) {
             dropdownMenu.setOnItemSelectedListener(this);
         }
+        dropdownMenu.setEnabled(true);
 
         // Create ArrayAdapter using the string array and default spinner layout
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
@@ -155,46 +126,7 @@ public class IdentifyCarMake extends AppCompatActivity implements AdapterView.On
         }
     }
 
-    // OnClick handler for 'Identify' button
-//    public void handleIdentify(View view) {
-//        ConstraintLayout layout = findViewById(R.id.identifyCarMakeLayout);
-//        String selectedText = dropdownMenu.getSelectedItem().toString().toLowerCase();
-//
-//        if (button.getText().equals("IDENTIFY")) {
-//            // Check if user has selected the correct choice
-//            boolean answerIsCorrect = quiz.answerIsCorrect(displayedImage, selectedText);
-//
-//            button.setText(R.string.next);
-//
-//            // Show alert accordingly
-//            if (answerIsCorrect) {
-//                int snackBarColor = getResources().getColor(R.color.correct);
-//                showSnackBar(layout, "Correct!", snackBarColor);
-//            } else {
-//                button.setEnabled(false); // Disable button until correct answer is shown
-//                int snackBarColor = getResources().getColor(R.color.incorrect);
-//                Snackbar snackbar = showSnackBar(layout, "Wrong!", snackBarColor);
-//                snackbar.addCallback(new Snackbar.Callback() {
-//                    // Once the first SnackBar times out, display the correct answer
-//                    @Override
-//                    public void onDismissed(Snackbar transientBottomBar, int event) {
-//                        super.onDismissed(transientBottomBar, event);
-//                        Snackbar correctAnswer = showSnackBar(layout,
-//                                "The correct answer is: " + quiz.getCorrectAnswer(displayedImage).toUpperCase(),
-//                                getResources().getColor(R.color.secondaryLightColor));
-//                        correctAnswer.setTextColor(getResources().getColor(R.color.black));
-//                        correctAnswer.getView().setBackgroundColor(getResources().getColor(R.color.secondaryLightColor));
-//                        Button button = IdentifyCarMake.this.button;
-//                        button.setEnabled(true); // Re-enable button
-//                    }
-//                });
-//            }
-//        } else {
-//            previousImage = displayedImage;
-//            onCreateHelper();
-//        }
-//    }
-
+    // OnClick listener for the'Identify' button
     public void handleIdentify() {
         ConstraintLayout layout = findViewById(R.id.identifyCarMakeLayout);
         String selectedText = dropdownMenu.getSelectedItem().toString().toLowerCase();
@@ -230,6 +162,7 @@ public class IdentifyCarMake extends AppCompatActivity implements AdapterView.On
                     }
                 });
             }
+            dropdownMenu.setEnabled(false);
         } else {
             previousImage = displayedImage;
             onCreateHelper();
@@ -245,4 +178,10 @@ public class IdentifyCarMake extends AppCompatActivity implements AdapterView.On
         snackBarView.setBackgroundColor(snackBarColor);
         return snackbar;
     }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) { }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) { }
 }
