@@ -1,10 +1,13 @@
 package com.chandira.mad_cw01;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -23,19 +26,59 @@ public class IdentifyCarImage extends AppCompatActivity {
     private ImageView imageView3;
     private final Quiz quiz = new Quiz();
 
+    private TextView countdownText;
+    private Timer timer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_identify_car_image);
+
+        buttonNext = findViewById(R.id.submitCharacter);
+        imageView1 = findViewById(R.id.carImage1);
+        imageView2 = findViewById(R.id.carImage2);
+        imageView3 = findViewById(R.id.carImage3);
+
+        ConstraintLayout layout = findViewById(R.id.identifyCarImageLayout);
+        countdownText = findViewById(R.id.timerText3);
+        timer = new Timer();
+
+        SharedPreferences state = getSharedPreferences("preferences", 0);
+        boolean switchState = state.getBoolean("switchState", false);
+        if (switchState) {
+            timer.countDownTimer = new CountDownTimer(timer.getTimeLeftInMilliSeconds(), 1000) {
+                @RequiresApi(api = Build.VERSION_CODES.M)
+                @Override
+                public void onTick(long millisUntilFinished) {
+                    timer.setTimeLeftInMilliSeconds(millisUntilFinished);
+                    timer.updateTimer(countdownText, getColor(R.color.primaryColor), getColor(R.color.incorrect));
+                }
+
+                @Override
+                public void onFinish() {
+                    showSnackBar(layout, "You ran out of time!", getResources().getColor(R.color.incorrect));
+                    buttonNext.setEnabled(true);
+                    setEnabledImageView(false, imageView1, imageView2, imageView3);
+                }
+            }.start();
+        } else {
+            timer.countDownTimer = new CountDownTimer(timer.getTimeLeftInMilliSeconds(), 1000) {
+                @Override
+                public void onTick(long millisUntilFinished) { }
+
+                @Override
+                public void onFinish() { }
+            }.start();
+            countdownText.setVisibility(View.INVISIBLE);
+        }
+
         onCreateHelper();
     }
 
     // Helper method to select new images and change ImageViews
     public void onCreateHelper() {
+        timer.resetTimer();
         textViewCarMake = findViewById(R.id.textCarMake);
-        imageView1 = findViewById(R.id.carImage1);
-        imageView2 = findViewById(R.id.carImage2);
-        imageView3 = findViewById(R.id.carImage3);
 
         int image1ResID = quiz.returnRandomImage();
         int image2ResID = quiz.returnRandomImage();
@@ -77,6 +120,7 @@ public class IdentifyCarImage extends AppCompatActivity {
 
     // OnClick handler for the 3 clickable ImageViews
     public void handleImageViewClick(View view) {
+        timer.stopTimer();
         ConstraintLayout layout = findViewById(R.id.identifyCarImageLayout);
         int imageResID = (int) view.getTag();
 
@@ -92,17 +136,26 @@ public class IdentifyCarImage extends AppCompatActivity {
 
         // Enable 'Next' button and disable image buttons
         buttonNext.setEnabled(true);
-        imageView1.setEnabled(false);
-        imageView2.setEnabled(false);
-        imageView3.setEnabled(false);
+        setEnabledImageView(false, imageView1, imageView2, imageView3);
+//        imageView1.setEnabled(false);
+//        imageView2.setEnabled(false);
+//        imageView3.setEnabled(false);
     }
 
     // OnClick handler for 'Next' button
     public void handleNext(View view) {
         onCreateHelper();
-        imageView1.setEnabled(true);
-        imageView2.setEnabled(true);
-        imageView3.setEnabled(true);
+        setEnabledImageView(true, imageView1, imageView2, imageView3);
+//        imageView1.setEnabled(true);
+//        imageView2.setEnabled(true);
+//        imageView3.setEnabled(true);
+    }
+
+    // Helper method to enable/disable ImageViews
+    private static void setEnabledImageView(boolean state, ImageView... imageViews) {
+        for (ImageView imageView : imageViews) {
+            imageView.setEnabled(state);
+        }
     }
 
     // Utility method to create SnackBar

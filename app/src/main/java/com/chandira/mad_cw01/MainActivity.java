@@ -13,7 +13,7 @@ import androidx.appcompat.widget.SwitchCompat;
 public class MainActivity extends AppCompatActivity {
 
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
-    private boolean switchState = false;
+//    private boolean switchState = false;
     private SwitchCompat simpleSwitch;
 
     @Override
@@ -47,12 +47,22 @@ public class MainActivity extends AppCompatActivity {
 
     public void launchIdentifyCarImageActivity(View view) {
         Intent intent = new Intent(this, IdentifyCarImage.class);
+        SharedPreferences state = getSharedPreferences("preferences", 0);
+        SharedPreferences.Editor editor = state.edit();
+        editor.putBoolean("switchState", simpleSwitch.isChecked());
+        editor.commit();
         startActivity(intent);
+
     }
 
     public void launchAdvancedLevelActivity(View view) {
         Intent intent = new Intent(this, AdvancedLevel.class);
+        SharedPreferences state = getSharedPreferences("preferences", 0);
+        SharedPreferences.Editor editor = state.edit();
+        editor.putBoolean("switchState", simpleSwitch.isChecked());
+        editor.commit();
         startActivity(intent);
+
     }
 
 }

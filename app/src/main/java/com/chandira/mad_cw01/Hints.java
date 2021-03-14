@@ -43,9 +43,7 @@ public class Hints extends AppCompatActivity {
 
         button = findViewById(R.id.submitCharacter);
         button.setOnClickListener(v -> handleHintButtonClick());
-
         countdownText = findViewById(R.id.timerText2);
-
         timer = new Timer();
 
         SharedPreferences state = getSharedPreferences("preferences", 0);
@@ -129,8 +127,7 @@ public class Hints extends AppCompatActivity {
             boolean isGuessCorrect = false;
 
             // Check if inputted letter exists in lettersGuessed
-            // If not:
-            if (!lettersGuessed.contains(input)) {
+            if (!lettersGuessed.contains(input)) { // If not:
                 // Find and update EditTexts if the input is correct
                 for (int y = 0; y <= lettersInCarMake.size() - 1; y++) {
                     if (input.equalsIgnoreCase(lettersInCarMake.get(y))) {
@@ -141,10 +138,7 @@ public class Hints extends AppCompatActivity {
                         isGuessCorrect = true;
                     }
                 }
-            } else {
-                // If it does exist: Do nothing
-                isGuessCorrect = true;
-            }
+            } else { isGuessCorrect = true; } // If it exists: do nothing
             timer.resetTimer();
 
             if (!isGuessCorrect) {
