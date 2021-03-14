@@ -2,13 +2,16 @@ package com.chandira.mad_cw01;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
@@ -29,15 +32,43 @@ public class Hints extends AppCompatActivity {
     private ArrayList<String> lettersGuessed;
     private final Quiz quiz = new Quiz();
 
+    private TextView countdownText;
+    private CountDownTimer countDownTimer;
+    private long timeLeftInMilliSeconds = 21000;
+    private boolean timerRunning;
+    Timer timer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hints);
+
+        button = findViewById(R.id.submitCharacter);
+        button.setOnClickListener(v -> handleHintButtonClick());
+
+        countdownText = findViewById(R.id.timerText2);
+
+        timer = new Timer(7000);
+        timer.countDownTimer = new CountDownTimer(timer.getTimeLeftInMilliSeconds(), 1000) {
+            @RequiresApi(api = Build.VERSION_CODES.M)
+            @Override
+            public void onTick(long millisUntilFinished) {
+                timer.setTimeLeftInMilliSeconds(millisUntilFinished);
+                timer.updateTimer(countdownText, getColor(R.color.primaryColor), getColor(R.color.incorrect));
+            }
+
+            @Override
+            public void onFinish() {
+                handleHintButtonClick();
+            }
+        }.start();
         onCreateHelper();
     }
 
     // Helper method to select new image and change ImageView
     public void onCreateHelper() {
+        timer.resetTimer();
+
         correctGuesses = 0;
         incorrectGuesses = 0;
 
@@ -74,7 +105,7 @@ public class Hints extends AppCompatActivity {
     }
 
     // OnClick handler for button
-    public void handleHintButtonClick(View view) {
+    public void handleHintButtonClick() {
         if (button.getText().toString().equalsIgnoreCase("SUBMIT")) {
             ConstraintLayout layout = findViewById(R.id.hintLayout);
             userInput = findViewById(R.id.textHangmanUserInput);
@@ -105,7 +136,9 @@ public class Hints extends AppCompatActivity {
                 showSnackBar(layout, "Correct!", getResources().getColor(R.color.correct));
                 userInput.setEnabled(false);
                 button.setText(R.string.next);
+                timer.stopTimer();
             } else if (incorrectGuesses >= 3) {
+                timer.stopTimer();
                 button.setEnabled(false);
                 Snackbar snackbar = showSnackBar(layout, "Wrong!", getResources().getColor(R.color.incorrect));
                 snackbar.addCallback(new Snackbar.Callback() {
@@ -128,7 +161,9 @@ public class Hints extends AppCompatActivity {
                 button.setText(R.string.next);
             }
             userInput.setText(""); // Clear EditText
+            timer.resetTimer();
         } else {
+            timer.stopTimer();
             previousImage = displayedImage;
             linearLayout.removeAllViews(); // Remove the EditTexts
             onCreateHelper();

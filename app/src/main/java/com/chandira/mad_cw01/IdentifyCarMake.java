@@ -26,7 +26,6 @@ public class IdentifyCarMake extends AppCompatActivity implements AdapterView.On
     private Button button;
     private Spinner dropdownMenu;
     private final Quiz quiz = new Quiz();
-    Boolean timerState;
 
     private TextView countdownText;
     private CountDownTimer countDownTimer;
@@ -57,35 +56,7 @@ public class IdentifyCarMake extends AppCompatActivity implements AdapterView.On
         onCreateHelper();
     }
 
-    public void startTimer() {
-        countDownTimer = new CountDownTimer(timeLeftInMilliSeconds, 1000) {
-            @Override
-            public void onTick(long millisUntilFinished) {
-                timeLeftInMilliSeconds = millisUntilFinished;
-                updateTimer();
-            }
 
-            @Override
-            public void onFinish() {
-                handleIdentify();
-            }
-        }.start();
-    }
-
-    public void stopTimer() {
-        countDownTimer.cancel();
-        timerRunning = false;
-    }
-
-    public void updateTimer() {
-        int seconds = (int)  timeLeftInMilliSeconds % 60000 / 1000;
-
-        String timeLeftText = "";
-        if (seconds < 10) timeLeftText += "0";
-        timeLeftText += seconds;
-
-        countdownText.setText(timeLeftText);
-    }
 
     // Helper method to select new image and change ImageView
     private void onCreateHelper() {
@@ -168,6 +139,39 @@ public class IdentifyCarMake extends AppCompatActivity implements AdapterView.On
             onCreateHelper();
         }
     }
+
+    public void startTimer() {
+        countDownTimer = new CountDownTimer(timeLeftInMilliSeconds, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                timeLeftInMilliSeconds = millisUntilFinished;
+                updateTimer();
+            }
+
+            @Override
+            public void onFinish() {
+                handleIdentify();
+            }
+        }.start();
+    }
+
+    public void stopTimer() {
+        countDownTimer.cancel();
+        timerRunning = false;
+    }
+
+    public void updateTimer() {
+        int seconds = (int)  timeLeftInMilliSeconds % 60000 / 1000;
+
+        countdownText.setTextColor(getResources().getColor(R.color.primaryColor));
+        String timeLeftText = "";
+        if (seconds <= 5)
+            countdownText.setTextColor(getResources().getColor(R.color.incorrect));
+        timeLeftText += seconds;
+
+        countdownText.setText(timeLeftText);
+    }
+
 
     // Utility method to create SnackBar
     private Snackbar showSnackBar(ConstraintLayout layout, String message, int snackBarColor) {

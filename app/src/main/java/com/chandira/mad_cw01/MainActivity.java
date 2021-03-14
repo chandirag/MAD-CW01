@@ -29,18 +29,10 @@ public class MainActivity extends AppCompatActivity {
 
     public void launchIdentifyCarMakeActivity(View view) {
         Intent intent = new Intent(this, IdentifyCarMake.class);
-//        if (simpleSwitch.isChecked())
-//            intent.putExtra("switchStateON", 1);
-//        else
-//            intent.putExtra("switchStateOFF", 0);
-
         SharedPreferences state = getSharedPreferences("preferences", 0);
         SharedPreferences.Editor editor = state.edit();
         editor.putBoolean("switchState", simpleSwitch.isChecked());
-        // Commit the edits!
         editor.commit();
-
-
         startActivity(intent);
     }
 
@@ -59,15 +51,4 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    // Save switch state when switching between activities
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        if (requestCode == 1){
-//            if (resultCode == RESULT_OK) {
-//                switchState = data.getBooleanExtra("switchState", false);
-//                simpleSwitch.setChecked(switchState);
-//            }
-//        }
-//    }
 }
