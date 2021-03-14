@@ -4,7 +4,7 @@ import android.os.CountDownTimer;
 import android.widget.TextView;
 
 public class Timer {
-    public CountDownTimer countDownTimer;
+    private CountDownTimer countDownTimer;
     private long timeLeftInMilliSeconds = 21000;
 
     public Timer() { }
@@ -18,6 +18,14 @@ public class Timer {
 
     public void setTimeLeftInMilliSeconds(long timeLeftInMilliSeconds) {
         this.timeLeftInMilliSeconds = timeLeftInMilliSeconds;
+    }
+
+    public CountDownTimer getCountDownTimer() {
+        return countDownTimer;
+    }
+
+    public void setCountDownTimer(CountDownTimer countDownTimer) {
+        this.countDownTimer = countDownTimer;
     }
 
     public void stopTimer() {

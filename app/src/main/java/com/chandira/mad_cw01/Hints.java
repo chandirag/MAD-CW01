@@ -22,58 +22,58 @@ import java.util.ArrayList;
 
 public class Hints extends AppCompatActivity {
 
-    private int incorrectGuesses = 0;
-    private int correctGuesses = 0;
-    private int displayedImage;
-    private int previousImage;
-    private LinearLayout linearLayout;
-    private Button button;
-    private EditText userInput;
-    private ArrayList<String> lettersInCarMake;
-    private ArrayList<String> lettersGuessed;
     private final Quiz quiz = new Quiz();
+    private int mIncorrectGuesses = 0;
+    private int mCorrectGuesses = 0;
+    private int mDisplayedImage;
+    private int mPreviousImage;
+    private LinearLayout mLinearLayout;
+    private Button mButton;
+    private EditText mUserInput;
+    private ArrayList<String> mLettersInCarMake;
+    private ArrayList<String> mLettersGuessed;
+    private TextView mCountdownText;
+    private Timer mTimer;
 
-    private TextView countdownText;
-    private Timer timer;
-
+    @RequiresApi(api = Build.VERSION_CODES.Q)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hints);
 
-        button = findViewById(R.id.submitCharacter);
-        button.setOnClickListener(v -> handleHintButtonClick());
-        countdownText = findViewById(R.id.timerText2);
-        timer = new Timer();
+        mButton = findViewById(R.id.submitCharacter);
+        mButton.setOnClickListener(v -> handleHintButtonClick());
+        mCountdownText = findViewById(R.id.timerText2);
+        mTimer = new Timer();
 
+        // Check switch state and initiate timer
         SharedPreferences state = getSharedPreferences("preferences", 0);
         boolean switchState = state.getBoolean("switchState", false);
         if (switchState) {
-            timer.countDownTimer = new CountDownTimer(timer.getTimeLeftInMilliSeconds(), 1000) {
+            mTimer.setCountDownTimer(new CountDownTimer(mTimer.getTimeLeftInMilliSeconds(), 1000) {
                 @RequiresApi(api = Build.VERSION_CODES.M)
                 @Override
                 public void onTick(long millisUntilFinished) {
-                    timer.setTimeLeftInMilliSeconds(millisUntilFinished);
-                    timer.updateTimer(countdownText, getColor(R.color.primaryColor), getColor(R.color.incorrect));
+                    mTimer.setTimeLeftInMilliSeconds(millisUntilFinished);
+                    mTimer.updateTimer(mCountdownText, getColor(R.color.primaryColor), getColor(R.color.incorrect));
                 }
 
                 @Override
                 public void onFinish() {
                     handleHintButtonClick();
                 }
-            }.start();
+            }.start());
         } else {
-            timer.countDownTimer = new CountDownTimer(timer.getTimeLeftInMilliSeconds(), 1000) {
+            mTimer.setCountDownTimer(new CountDownTimer(mTimer.getTimeLeftInMilliSeconds(), 1000) {
                 @Override
                 public void onTick(long millisUntilFinished) {
                 }
 
                 @Override
                 public void onFinish() {
-
                 }
-            };
-            countdownText.setVisibility(View.INVISIBLE);
+            }.start());
+            mCountdownText.setVisibility(View.INVISIBLE);
         }
 
         onCreateHelper();
@@ -81,79 +81,82 @@ public class Hints extends AppCompatActivity {
 
     // Helper method to select new image and change ImageView
     public void onCreateHelper() {
-        timer.resetTimer();
+        mTimer.resetTimer();
 
-        correctGuesses = 0;
-        incorrectGuesses = 0;
+        mCorrectGuesses = 0;
+        mIncorrectGuesses = 0;
 
-        button = findViewById(R.id.submitCharacter);
-        userInput = findViewById(R.id.textHangmanUserInput);
-        linearLayout = findViewById(R.id.linearLayout);
+        mButton = findViewById(R.id.submitCharacter);
+        mUserInput = findViewById(R.id.textHangmanUserInput);
+        mLinearLayout = findViewById(R.id.linearLayout);
         ImageView imageView = findViewById(R.id.imageViewCar);
 
-        userInput.setEnabled(true);
+        mUserInput.setEnabled(true);
 
         // Apply color state to button
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            button.setBackgroundTintList(
+            mButton.setBackgroundTintList(
                     getApplicationContext().getResources().getColorStateList(R.color.button_color));
         }
 
         // Display random image
-        displayedImage = quiz.returnRandomImage();
-        while (previousImage == displayedImage) {
-            displayedImage = quiz.returnRandomImage();
+        mDisplayedImage = quiz.returnRandomImage();
+        while (mPreviousImage == mDisplayedImage) {
+            mDisplayedImage = quiz.returnRandomImage();
         }
-        imageView.setImageResource(displayedImage);
-        button.setText(R.string.submit);
+        imageView.setImageResource(mDisplayedImage);
+        mButton.setText(R.string.submit);
 
         // Display a number of disabled TextViews according to the number of letters
         // in car make
-        lettersInCarMake = new ArrayList<>();
-        lettersGuessed = new ArrayList<>();
-        int count = quiz.getCars().get(displayedImage).length();
+        mLettersInCarMake = new ArrayList<>();
+        mLettersGuessed = new ArrayList<>();
+        int count = quiz.getCars().get(mDisplayedImage).length();
         for (int i = 0; i < count; i++) {
             addEditText(i);
-            lettersInCarMake.add(quiz.getCars().get(displayedImage).substring(i, i + 1).toUpperCase());
+            mLettersInCarMake.add(quiz.getCars().get(mDisplayedImage).substring(i, i + 1).toUpperCase());
         }
     }
 
     // OnClick handler for button
     public void handleHintButtonClick() {
-        if (button.getText().toString().equalsIgnoreCase("SUBMIT")) {
+        if (mButton.getText().toString().equalsIgnoreCase("SUBMIT")) {
             ConstraintLayout layout = findViewById(R.id.hintLayout);
-            userInput = findViewById(R.id.textHangmanUserInput);
-            String input = userInput.getText().toString().toUpperCase();
+            mUserInput = findViewById(R.id.textHangmanUserInput);
+            String input = mUserInput.getText().toString().toUpperCase();
             boolean isGuessCorrect = false;
 
             // Check if inputted letter exists in lettersGuessed
-            if (!lettersGuessed.contains(input)) { // If not:
+            if (!mLettersGuessed.contains(input)) { // If not:
                 // Find and update EditTexts if the input is correct
-                for (int y = 0; y <= lettersInCarMake.size() - 1; y++) {
-                    if (input.equalsIgnoreCase(lettersInCarMake.get(y))) {
+                for (int y = 0; y <= mLettersInCarMake.size() - 1; y++) {
+                    if (input.equalsIgnoreCase(mLettersInCarMake.get(y))) {
                         EditText editText = findViewById(R.id.hintText + y);
-                        editText.setText(lettersInCarMake.get(y).toUpperCase());
-                        lettersGuessed.add(input); // Add the letter to lettersGuessed
-                        correctGuesses++; // Increment no. of correct guesses
+                        editText.setText(mLettersInCarMake.get(y).toUpperCase());
+                        mLettersGuessed.add(input); // Add the letter to lettersGuessed
+                        mCorrectGuesses++; // Increment no. of correct guesses
                         isGuessCorrect = true;
                     }
                 }
-            } else { isGuessCorrect = true; } // If it exists: do nothing
-            timer.resetTimer();
+            } else {
+                // If it exists: do nothing
+                isGuessCorrect = true;
+            }
+            mTimer.resetTimer();
 
             if (!isGuessCorrect) {
-                incorrectGuesses++;
-                timer.resetTimer();
+                mIncorrectGuesses++;
+                mTimer.resetTimer();
             }
 
-            if (correctGuesses == lettersInCarMake.size()) {
+            if (mCorrectGuesses == mLettersInCarMake.size()) {
                 showSnackBar(layout, "Correct!", getResources().getColor(R.color.correct));
-                userInput.setEnabled(false);
-                button.setText(R.string.next);
-                timer.stopTimer();
-            } else if (incorrectGuesses >= 3) {
-                timer.stopTimer();
-                button.setEnabled(false);
+                mUserInput.setEnabled(false);
+                mButton.setText(R.string.next);
+                mTimer.stopTimer();
+            } else if (mIncorrectGuesses >= 3) {
+                mTimer.stopTimer();
+                mButton.setEnabled(false);
                 Snackbar snackbar = showSnackBar(layout, "Wrong!", getResources().getColor(R.color.incorrect));
                 snackbar.addCallback(new Snackbar.Callback() {
                     // Once the first SnackBar times out, display the correct answer
@@ -161,24 +164,24 @@ public class Hints extends AppCompatActivity {
                     public void onDismissed(Snackbar transientBottomBar, int event) {
                         super.onDismissed(transientBottomBar, event);
                         Snackbar correctAnswer = Snackbar.make(layout,
-                                "The correct answer is: " + quiz.getCorrectAnswer(displayedImage).toUpperCase(),
+                                "The correct answer is: " + quiz.getCorrectAnswer(mDisplayedImage).toUpperCase(),
                                 Snackbar.LENGTH_SHORT)
                                 .setTextColor(getResources().getColor(R.color.black));
                         correctAnswer.show();
                         View snackBarView = correctAnswer.getView();
                         snackBarView.setBackgroundColor(getResources().getColor(R.color.secondaryLightColor));
-                        Button button = Hints.this.button;
+                        Button button = Hints.this.mButton;
                         button.setEnabled(true);
                     }
                 });
-                userInput.setEnabled(false);
-                button.setText(R.string.next);
+                mUserInput.setEnabled(false);
+                mButton.setText(R.string.next);
             }
-            userInput.setText(""); // Clear EditText
+            mUserInput.setText(""); // Clear EditText
         } else {
-            timer.stopTimer();
-            previousImage = displayedImage;
-            linearLayout.removeAllViews(); // Remove the EditTexts
+            mTimer.stopTimer();
+            mPreviousImage = mDisplayedImage;
+            mLinearLayout.removeAllViews(); // Remove the EditTexts
             onCreateHelper();
         }
     }
@@ -190,7 +193,7 @@ public class Hints extends AppCompatActivity {
         editText.setText("-");
         editText.setEnabled(false);
         editText.setId(R.id.hintText + number);
-        linearLayout.addView(editText);
+        mLinearLayout.addView(editText);
     }
 
     // Utility method to create SnackBar

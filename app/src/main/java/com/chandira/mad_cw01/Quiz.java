@@ -67,13 +67,6 @@ public class Quiz {
         return carImages[i];
     }
 
-    public String returnRandomCarMake(Context context) {
-        Random random = new Random();
-        String[] carMakes = context.getResources().getStringArray(R.array.car_makes);
-        int i = random.nextInt(carMakes.length);
-        return carMakes[i];
-    }
-
     public boolean answerIsCorrect(int displayedImage, String userChoice) {
         String carMake = cars.get(displayedImage);
         assert carMake != null;

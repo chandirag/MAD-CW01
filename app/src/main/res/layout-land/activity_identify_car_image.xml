@@ -13,22 +13,23 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:fontFamily="@font/roboto_medium"
         android:text="@string/identifyCarImageInstructions"
         android:textColor="@color/black"
-        android:textSize="14sp"
+        android:textSize="16sp"
         app:layout_constraintEnd_toStartOf="@+id/timerText3"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
 
     <TextView
         android:id="@+id/textCarMake"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:fontFamily="@font/poppins_medium"
         android:text=""
         android:textColor="@color/primaryDarkColor"
@@ -40,59 +41,44 @@
 
     <ImageView
         android:id="@+id/carImage1"
-        android:layout_width="0dp"
-        android:layout_height="140dp"
+        android:layout_width="200dp"
+        android:layout_height="120dp"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
         android:onClick="handleImageViewClick"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textCarMake"
         tools:srcCompat="@tools:sample/avatars" />
 
     <ImageView
         android:id="@+id/carImage2"
-        android:layout_width="0dp"
-        android:layout_height="140dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
+        android:layout_width="200dp"
+        android:layout_height="120dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
         android:onClick="handleImageViewClick"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/carImage1"
+        app:layout_constraintEnd_toStartOf="@+id/carImage3"
+        app:layout_constraintStart_toEndOf="@+id/carImage1"
+        app:layout_constraintTop_toBottomOf="@+id/textCarMake"
         tools:srcCompat="@tools:sample/avatars" />
 
     <ImageView
         android:id="@+id/carImage3"
-        android:layout_width="0dp"
-        android:layout_height="140dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
+        android:layout_width="200dp"
+        android:layout_height="120dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:onClick="handleImageViewClick"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/carImage2"
+        app:layout_constraintTop_toBottomOf="@+id/textCarMake"
         tools:srcCompat="@tools:sample/avatars" />
-
 
     <Button
         android:id="@+id/buttonNext"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
+        android:layout_width="286dp"
+        android:layout_height="53dp"
+        android:layout_marginTop="16dp"
         android:fontFamily="@font/poppins_bold"
         android:onClick="handleNext"
         android:paddingLeft="20dp"
@@ -101,15 +87,14 @@
         android:paddingBottom="15dp"
         android:text="@string/next"
         android:textColor="@color/secondaryTextColor"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/carImage3" />
+        app:layout_constraintEnd_toEndOf="@+id/carImage3"
+        app:layout_constraintStart_toStartOf="@+id/carImage1"
+        app:layout_constraintTop_toBottomOf="@+id/carImage2" />
 
     <TextView
         android:id="@+id/timerText3"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:fontFamily="@font/poppins_bold"

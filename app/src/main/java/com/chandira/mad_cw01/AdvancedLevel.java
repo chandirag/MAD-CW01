@@ -16,112 +16,113 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.google.android.material.snackbar.Snackbar;
 
-public class AdvancedLevel extends AppCompatActivity {
-    private int image1ResID;
-    private int image2ResID;
-    private int image3ResID;
-    private int submitCount = 0;
-    private int points = 0;
-    private Button buttonSubmit;
-    private Button pointsView;
-    private TextView correctAnswer1;
-    private TextView correctAnswer2;
-    private TextView correctAnswer3;
-    private final Quiz quiz = new Quiz();
+import java.util.Objects;
 
-    private TextView countdownText;
-    private Timer timer;
+public class AdvancedLevel extends AppCompatActivity {
+    private final Quiz quiz = new Quiz();
+    private int mImage1ResID;
+    private int mImage2ResID;
+    private int mImage3ResID;
+    private int mSubmitCount = 0;
+    private int mPoints = 0;
+    private Button mButtonSubmit;
+    private Button mPointsView;
+    private TextView mCorrectAnswer1;
+    private TextView mCorrectAnswer2;
+    private TextView mCorrectAnswer3;
+    private TextView mCountdownText;
+    private Timer mTimer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_advanced_level);
 
-        buttonSubmit = findViewById(R.id.buttonSubmit);
-        buttonSubmit.setOnClickListener(v -> handleSubmit());
+        mButtonSubmit = findViewById(R.id.buttonSubmit);
+        mButtonSubmit.setOnClickListener(v -> handleSubmit());
 
-        countdownText = findViewById(R.id.timerText4);
-        timer = new Timer();
+        mCountdownText = findViewById(R.id.timerText4);
+        mTimer = new Timer();
 
+        // Check the switch state and initiate timer
         SharedPreferences state = getSharedPreferences("preferences", 0);
         boolean switchState = state.getBoolean("switchState", false);
         if (switchState) {
-            timer.countDownTimer = new CountDownTimer(timer.getTimeLeftInMilliSeconds(), 1000) {
+            mTimer.setCountDownTimer(new CountDownTimer(mTimer.getTimeLeftInMilliSeconds(), 1000) {
                 @RequiresApi(api = Build.VERSION_CODES.M)
                 @Override
                 public void onTick(long millisUntilFinished) {
-                    timer.setTimeLeftInMilliSeconds(millisUntilFinished);
-                    timer.updateTimer(countdownText, getColor(R.color.primaryColor), getColor(R.color.incorrect));
+                    mTimer.setTimeLeftInMilliSeconds(millisUntilFinished);
+                    mTimer.updateTimer(mCountdownText, getColor(R.color.primaryColor), getColor(R.color.incorrect));
                 }
 
                 @Override
                 public void onFinish() {
                     handleSubmit();
                 }
-            }.start();
+            }.start());
         } else {
-            timer.countDownTimer = new CountDownTimer(timer.getTimeLeftInMilliSeconds(), 1000) {
+            mTimer.setCountDownTimer(new CountDownTimer(mTimer.getTimeLeftInMilliSeconds(), 1000) {
                 @Override
                 public void onTick(long millisUntilFinished) {
                 }
 
                 @Override
                 public void onFinish() {
-
                 }
-            };
-            countdownText.setVisibility(View.INVISIBLE);
+            }.start());
+            mCountdownText.setVisibility(View.INVISIBLE);
         }
 
         onCreateHelper();
     }
 
     public void onCreateHelper() {
-        timer.resetTimer();
-        pointsView = findViewById(R.id.buttonPoints);
-        buttonSubmit = findViewById(R.id.buttonSubmit);
+        mTimer.resetTimer();
+        mPointsView = findViewById(R.id.buttonPoints);
+        mButtonSubmit = findViewById(R.id.buttonSubmit);
 
         ImageView imageView1 = findViewById(R.id.imageView1);
         ImageView imageView2 = findViewById(R.id.imageView2);
         ImageView imageView3 = findViewById(R.id.imageView3);
 
-        image1ResID = quiz.returnRandomImage();
-        image2ResID = quiz.returnRandomImage();
-        while (image1ResID == image2ResID) {
+        mImage1ResID = quiz.returnRandomImage();
+        mImage2ResID = quiz.returnRandomImage();
+        while (mImage1ResID == mImage2ResID) {
             // If image2 is the same as image1 pick new image as image2
-            image2ResID = quiz.returnRandomImage();
+            mImage2ResID = quiz.returnRandomImage();
         }
-        image3ResID = quiz.returnRandomImage();
-        while (image3ResID == image2ResID || image3ResID == image1ResID) {
+        mImage3ResID = quiz.returnRandomImage();
+        while (mImage3ResID == mImage2ResID || mImage3ResID == mImage1ResID) {
             // If image3 is the same as (image1 OR image2) pick new image as image3
-            image3ResID = quiz.returnRandomImage();
+            mImage3ResID = quiz.returnRandomImage();
         }
 
         // Set randomly generated images
-        imageView1.setImageResource(image1ResID);
-        imageView2.setImageResource(image2ResID);
-        imageView3.setImageResource(image3ResID);
+        imageView1.setImageResource(mImage1ResID);
+        imageView2.setImageResource(mImage2ResID);
+        imageView3.setImageResource(mImage3ResID);
 
         // Set tags for imageViews so the resourceID can be fetched back later
-        imageView1.setTag(image1ResID);
-        imageView2.setTag(image2ResID);
-        imageView3.setTag(image3ResID);
+        imageView1.setTag(mImage1ResID);
+        imageView2.setTag(mImage2ResID);
+        imageView3.setTag(mImage3ResID);
 
         // Create TextViews with the correct answer and hide it initially
-        correctAnswer1 = findViewById(R.id.textCorrectAnswer1);
-        correctAnswer2 = findViewById(R.id.textCorrectAnswer2);
-        correctAnswer3 = findViewById(R.id.textCorrectAnswer3);
+        mCorrectAnswer1 = findViewById(R.id.textCorrectAnswer1);
+        mCorrectAnswer2 = findViewById(R.id.textCorrectAnswer2);
+        mCorrectAnswer3 = findViewById(R.id.textCorrectAnswer3);
 
-        correctAnswer1.setVisibility(View.INVISIBLE);
-        correctAnswer2.setVisibility(View.INVISIBLE);
-        correctAnswer3.setVisibility(View.INVISIBLE);
+        mCorrectAnswer1.setVisibility(View.INVISIBLE);
+        mCorrectAnswer2.setVisibility(View.INVISIBLE);
+        mCorrectAnswer3.setVisibility(View.INVISIBLE);
 
-        correctAnswer1.setText(quiz.getCars().get(image1ResID).toUpperCase());
-        correctAnswer2.setText(quiz.getCars().get(image2ResID).toUpperCase());
-        correctAnswer3.setText(quiz.getCars().get(image3ResID).toUpperCase());
+        mCorrectAnswer1.setText(Objects.requireNonNull(quiz.getCars().get(mImage1ResID)).toUpperCase());
+        mCorrectAnswer2.setText(Objects.requireNonNull(quiz.getCars().get(mImage2ResID)).toUpperCase());
+        mCorrectAnswer3.setText(Objects.requireNonNull(quiz.getCars().get(mImage3ResID)).toUpperCase());
     }
 
-
+    // Onclick handler for the submit button
     public void handleSubmit() {
         ConstraintLayout layout = findViewById(R.id.advancedLevelLayout);
         EditText editText1 = findViewById(R.id.editText1);
@@ -132,45 +133,44 @@ public class AdvancedLevel extends AppCompatActivity {
         String userInput2 = editText2.getText().toString();
         String userInput3 = editText3.getText().toString();
 
-        if (buttonSubmit.getText().toString().equalsIgnoreCase("SUBMIT")) {
-            timer.resetTimer();
-            submitCount++;
-            boolean answer1 = checkAnswer(quiz, editText1, image1ResID, userInput1);
-            boolean answer2 = checkAnswer(quiz, editText2, image2ResID, userInput2);
-            boolean answer3 = checkAnswer(quiz, editText3, image3ResID, userInput3);
+        if (mButtonSubmit.getText().toString().equalsIgnoreCase("SUBMIT")) {
+            mTimer.resetTimer();
+            mSubmitCount++;
+            boolean answer1 = checkAnswer(quiz, editText1, mImage1ResID, userInput1);
+            boolean answer2 = checkAnswer(quiz, editText2, mImage2ResID, userInput2);
+            boolean answer3 = checkAnswer(quiz, editText3, mImage3ResID, userInput3);
             boolean[] answers = {answer1, answer2, answer3};
-            TextView[] textViews = {correctAnswer1, correctAnswer2, correctAnswer3};
+            TextView[] textViews = {mCorrectAnswer1, mCorrectAnswer2, mCorrectAnswer3};
 
-            if (submitCount <= 3 && (answer1 && answer2 && answer3)) {
+            if (mSubmitCount <= 3 && (answer1 && answer2 && answer3)) {
                 showSnackBar(layout, "Correct!", getResources().getColor(R.color.correct));
-                buttonSubmit.setText(R.string.next);
-                for(boolean answer: answers) {
-                    if (answer) {
-                        points++;
-                    }
+                mButtonSubmit.setText(R.string.next);
+                for (boolean answer : answers) {
+                    if (answer) mPoints++;
                 }
-                timer.stopTimer();
-            } else if (submitCount == 3) {
+                mTimer.stopTimer();
+            } else if (mSubmitCount == 3) {
                 showSnackBar(layout, "Wrong!", getResources().getColor(R.color.incorrect));
-                buttonSubmit.setText(R.string.next);
-                for(int i = 0; i < answers.length; i++) {
+                mButtonSubmit.setText(R.string.next);
+                for (int i = 0; i < answers.length; i++) {
                     if (answers[i]) {
-                        points++;
+                        mPoints++;
                     } else {
                         // If the answer is incorrect, display the correct answer
                         TextView textView = textViews[i];
                         textView.setVisibility(View.VISIBLE);
                     }
                 }
-                timer.stopTimer();
+                mTimer.stopTimer();
             }
-            String pointsString = "Points: " + points;
-            pointsView.setText(pointsString);
+            String pointsString = "Points: " + mPoints;
+            mPointsView.setText(pointsString);
 
         } else {
-            submitCount = 0;
+            mSubmitCount = 0;
             onCreateHelper();
 
+            // Reset the EditTexts and Submit Button text
             editText1.setText("");
             editText1.setEnabled(true);
             editText1.setTextColor(getResources().getColor(R.color.black));
@@ -180,11 +180,12 @@ public class AdvancedLevel extends AppCompatActivity {
             editText3.setText("");
             editText3.setEnabled(true);
             editText3.setTextColor(getResources().getColor(R.color.black));
-            buttonSubmit.setText(R.string.submit);
+            mButtonSubmit.setText(R.string.submit);
         }
     }
 
-    public Snackbar showSnackBar(ConstraintLayout layout, String message, int snackBarColor) {
+    // Helper method to create a SnackBar
+    private Snackbar showSnackBar(ConstraintLayout layout, String message, int snackBarColor) {
         Snackbar snackbar = Snackbar.make(layout, message, Snackbar.LENGTH_SHORT)
                 .setTextColor(getResources().getColor(R.color.white));
         snackbar.show();
@@ -193,9 +194,9 @@ public class AdvancedLevel extends AppCompatActivity {
         return snackbar;
     }
 
+    // Helper method to check if answer is correct
     private boolean checkAnswer(Quiz quiz, EditText editText, int imageResID, String userInput) {
-        if (userInput.trim().equals("")) { return false; }
-
+        if (userInput.trim().equals("")) return false;
         if (quiz.answerIsCorrect(imageResID, userInput.trim())) {
             editText.setEnabled(false);
             editText.setTextColor(getResources().getColor(R.color.correct));

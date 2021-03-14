@@ -15,6 +15,11 @@
     <string name="identifyCarImageInstructions">Click on the image corresponding to the below displayed car make:</string>
     <string name="advancedLevelInstructions">Guess the 3 car manufacturers and enter details using the text boxes.</string>
     <string name="submit">SUBMIT</string>
+    <string name="identifyCarMakeInstructions">Select the car make which matches the image displayed below:</string>
+    <string name="timerDefaultValue">20</string>
+    <string name="advancedLevelEditTextHint">Enter the car make</string>
+    <string name="advancedLevelDefaultPoints">Points: 0</string>
+    <string name="hintsInstructions">Guess the make of the car by entering character by character into the text field below.</string>
 
 
     <string-array name="car_makes">

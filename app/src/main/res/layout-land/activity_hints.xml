@@ -2,10 +2,10 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/hintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Hints"
-    android:id="@+id/hintLayout">
+    tools:context=".Hints">
 
     <TextView
         android:id="@+id/textViewInstructions"
@@ -19,17 +19,18 @@
         android:fontFamily="@font/roboto_medium"
         android:text="@string/hintsInstructions"
         android:textColor="@color/black"
-        android:textSize="14sp"
+        android:textSize="16sp"
         app:layout_constraintEnd_toStartOf="@+id/timerText2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/imageViewCar"
-        android:layout_width="345dp"
-        android:layout_height="277dp"
-        android:layout_marginTop="70dp"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_width="274dp"
+        android:layout_height="202dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="64dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/benz" />
@@ -43,15 +44,13 @@
         android:inputType="textPersonName"
         android:maxLength="1"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.502"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imageViewCar"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
     <Button
         android:id="@+id/submitCharacter"
-        android:layout_width="0dp"
+        android:layout_width="210dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         android:fontFamily="@font/poppins_bold"
         android:paddingLeft="20dp"
         android:paddingTop="15dp"
@@ -59,21 +58,23 @@
         android:paddingBottom="15dp"
         android:text="@string/hintSubmit"
         app:layout_constraintEnd_toEndOf="@+id/textHangmanUserInput"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/textHangmanUserInput"
         app:layout_constraintTop_toBottomOf="@+id/textHangmanUserInput" />
 
     <LinearLayout
         android:id="@+id/linearLayout"
-        android:layout_width="0dp"
+        android:layout_width="400dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginLeft="32dp"
         android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
         android:gravity="center_horizontal|center_vertical"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageViewCar">
-    </LinearLayout>
+        app:layout_constraintStart_toEndOf="@+id/imageViewCar"
+        app:layout_constraintTop_toBottomOf="@+id/textViewInstructions"></LinearLayout>
 
     <TextView
         android:id="@+id/timerText2"
@@ -82,10 +83,10 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        android:text="@string/timerDefaultValue"
         android:fontFamily="@font/poppins_bold"
+        android:text="@string/timerDefaultValue"
         android:textColor="@color/primaryColor"
-        android:textSize="30sp"
+        android:textSize="35sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
