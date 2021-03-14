@@ -9,15 +9,15 @@
 
     <TextView
         android:id="@+id/textViewInstructions"
-        android:layout_width="287dp"
-        android:layout_height="35dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:text="@string/advancedLevelInstructions"
-        app:layout_constraintEnd_toStartOf="@+id/textViewPoints"
+        app:layout_constraintEnd_toStartOf="@+id/timerText4"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -109,30 +109,28 @@
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
         android:fontFamily="@font/poppins_bold"
+        android:onClick="handleSubmit"
         android:paddingLeft="20dp"
         android:paddingTop="15dp"
         android:paddingRight="20dp"
         android:paddingBottom="15dp"
         android:text="@string/submit"
-        android:onClick="handleSubmit"
         android:textColor="@color/secondaryTextColor"
         app:backgroundTint="@color/secondaryColor"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/buttonPoints"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView3" />
 
     <TextView
-        android:id="@+id/textViewPoints"
-        android:layout_width="26dp"
+        android:id="@+id/timerText4"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:fontFamily="@font/poppins_bold"
-        android:text="0"
+        android:text="20"
         android:textColor="@color/primaryColor"
         android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -144,7 +142,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/poppins_bold"
         android:text=""
-        android:textColor="@color/secondaryColor"
+        android:textColor="@color/secondaryDarkColor"
         app:layout_constraintStart_toStartOf="@+id/editText1"
         app:layout_constraintTop_toBottomOf="@+id/editText1" />
 
@@ -154,7 +152,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/poppins_bold"
         android:text=""
-        android:textColor="@color/secondaryColor"
+        android:textColor="@color/secondaryDarkColor"
         app:layout_constraintStart_toStartOf="@+id/editText2"
         app:layout_constraintTop_toBottomOf="@+id/editText2" />
 
@@ -164,9 +162,27 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/poppins_bold"
         android:text=""
-        android:textColor="@color/secondaryColor"
+        android:textColor="@color/secondaryDarkColor"
         app:layout_constraintStart_toStartOf="@+id/editText3"
         app:layout_constraintTop_toBottomOf="@+id/editText3" />
+
+    <Button
+        android:id="@+id/buttonPoints"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:text="Points: 0"
+        app:layout_constraintBaseline_toBaselineOf="@+id/buttonSubmit"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:paddingLeft="20dp"
+        android:paddingTop="15dp"
+        android:paddingRight="20dp"
+        android:fontFamily="@font/poppins_bold"
+        android:paddingBottom="15dp"
+        android:textColor="@color/white"
+        app:backgroundTint="@color/primaryDarkColor"
+        android:enabled="false"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -5,7 +5,7 @@ import android.widget.TextView;
 
 public class Timer {
     public CountDownTimer countDownTimer;
-    private long timeLeftInMilliSeconds = 6000;
+    private long timeLeftInMilliSeconds = 21000;
 
     public Timer() { }
     public Timer(long timeLeftInMilliSeconds) {
@@ -31,6 +31,8 @@ public class Timer {
         String timeLeftText = "";
         if (seconds <= 5)
             textView.setTextColor(warningColor);
+        if (seconds < 10)
+            timeLeftText += "0";
         timeLeftText += seconds;
 
         textView.setText(timeLeftText);

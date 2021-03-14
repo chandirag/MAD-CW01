@@ -1,43 +1,84 @@
 package com.chandira.mad_cw01;
 
+import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.google.android.material.snackbar.Snackbar;
 
 public class AdvancedLevel extends AppCompatActivity {
-    // TODO: Points only update after 3 tries are up
-
     private int image1ResID;
     private int image2ResID;
     private int image3ResID;
     private int submitCount = 0;
     private int points = 0;
     private Button buttonSubmit;
-    private TextView textViewPoints;
+    private Button pointsView;
     private TextView correctAnswer1;
     private TextView correctAnswer2;
     private TextView correctAnswer3;
     private final Quiz quiz = new Quiz();
 
+    private TextView countdownText;
+    private Timer timer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_advanced_level);
 
+        buttonSubmit = findViewById(R.id.buttonSubmit);
+        buttonSubmit.setOnClickListener(v -> handleSubmit());
+
+        countdownText = findViewById(R.id.timerText4);
+        timer = new Timer();
+
+        SharedPreferences state = getSharedPreferences("preferences", 0);
+        boolean switchState = state.getBoolean("switchState", false);
+        if (switchState) {
+            timer.countDownTimer = new CountDownTimer(timer.getTimeLeftInMilliSeconds(), 1000) {
+                @RequiresApi(api = Build.VERSION_CODES.M)
+                @Override
+                public void onTick(long millisUntilFinished) {
+                    timer.setTimeLeftInMilliSeconds(millisUntilFinished);
+                    timer.updateTimer(countdownText, getColor(R.color.primaryColor), getColor(R.color.incorrect));
+                }
+
+                @Override
+                public void onFinish() {
+                    handleSubmit();
+                }
+            }.start();
+        } else {
+            timer.countDownTimer = new CountDownTimer(timer.getTimeLeftInMilliSeconds(), 1000) {
+                @Override
+                public void onTick(long millisUntilFinished) {
+                }
+
+                @Override
+                public void onFinish() {
+
+                }
+            };
+            countdownText.setVisibility(View.INVISIBLE);
+        }
+
         onCreateHelper();
     }
 
     public void onCreateHelper() {
-        textViewPoints = findViewById(R.id.textViewPoints);
+        timer.resetTimer();
+        pointsView = findViewById(R.id.buttonPoints);
         buttonSubmit = findViewById(R.id.buttonSubmit);
 
         ImageView imageView1 = findViewById(R.id.imageView1);
@@ -81,7 +122,7 @@ public class AdvancedLevel extends AppCompatActivity {
     }
 
 
-    public void handleSubmit(View view) {
+    public void handleSubmit() {
         ConstraintLayout layout = findViewById(R.id.advancedLevelLayout);
         EditText editText1 = findViewById(R.id.editText1);
         EditText editText2 = findViewById(R.id.editText2);
@@ -92,6 +133,7 @@ public class AdvancedLevel extends AppCompatActivity {
         String userInput3 = editText3.getText().toString();
 
         if (buttonSubmit.getText().toString().equalsIgnoreCase("SUBMIT")) {
+            timer.resetTimer();
             submitCount++;
             boolean answer1 = checkAnswer(quiz, editText1, image1ResID, userInput1);
             boolean answer2 = checkAnswer(quiz, editText2, image2ResID, userInput2);
@@ -107,6 +149,7 @@ public class AdvancedLevel extends AppCompatActivity {
                         points++;
                     }
                 }
+                timer.stopTimer();
             } else if (submitCount == 3) {
                 showSnackBar(layout, "Wrong!", getResources().getColor(R.color.incorrect));
                 buttonSubmit.setText(R.string.next);
@@ -119,9 +162,10 @@ public class AdvancedLevel extends AppCompatActivity {
                         textView.setVisibility(View.VISIBLE);
                     }
                 }
+                timer.stopTimer();
             }
-            String pointsString = "" + points;
-            textViewPoints.setText(pointsString);
+            String pointsString = "Points: " + points;
+            pointsView.setText(pointsString);
 
         } else {
             submitCount = 0;
