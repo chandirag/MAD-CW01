@@ -12,13 +12,13 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.google.android.material.snackbar.Snackbar;
 
 import java.sql.Time;
-import java.util.Timer;
 
 public class IdentifyCarMake extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     private int displayedImage;
@@ -29,8 +29,9 @@ public class IdentifyCarMake extends AppCompatActivity implements AdapterView.On
 
     private TextView countdownText;
     private CountDownTimer countDownTimer;
-    private long timeLeftInMilliSeconds = 21000;
+    private long timeLeftInMilliSeconds = 6000;
     private boolean timerRunning;
+    private Timer timer;
 
 
     @Override
@@ -40,19 +41,41 @@ public class IdentifyCarMake extends AppCompatActivity implements AdapterView.On
 
         countdownText = findViewById(R.id.timerText);
 
-        startTimer();
+//        startTimer();
+        button = findViewById(R.id.buttonIdentifyCarMake);
+        button.setOnClickListener(v -> handleIdentify());
+
+        timer = new Timer();
 
         SharedPreferences state = getSharedPreferences("preferences", 0);
         boolean switchState = state.getBoolean("switchState", false);
         if (switchState) {
-            countDownTimer.start();
+            timer.countDownTimer = new CountDownTimer(timer.getTimeLeftInMilliSeconds(), 1000) {
+                @RequiresApi(api = Build.VERSION_CODES.M)
+                @Override
+                public void onTick(long millisUntilFinished) {
+                    timer.setTimeLeftInMilliSeconds(millisUntilFinished);
+                    timer.updateTimer(countdownText, getColor(R.color.primaryColor), getColor(R.color.incorrect));
+                }
+
+                @Override
+                public void onFinish() {
+                    handleIdentify();
+                }
+            }.start();
         } else {
+            timer.countDownTimer = new CountDownTimer(timer.getTimeLeftInMilliSeconds(), 1000) {
+                @Override
+                public void onTick(long millisUntilFinished) {
+                }
+
+                @Override
+                public void onFinish() {
+
+                }
+            };
             countdownText.setVisibility(View.INVISIBLE);
         }
-
-        button = findViewById(R.id.buttonIdentifyCarMake);
-        button.setOnClickListener(v -> handleIdentify());
-
         onCreateHelper();
     }
 
@@ -61,7 +84,8 @@ public class IdentifyCarMake extends AppCompatActivity implements AdapterView.On
     // Helper method to select new image and change ImageView
     private void onCreateHelper() {
         // Reset the timer
-        countDownTimer.start();
+//        countDownTimer.start();
+        timer.resetTimer();
 
         // Apply color state to button
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -105,17 +129,16 @@ public class IdentifyCarMake extends AppCompatActivity implements AdapterView.On
         if (button.getText().equals("IDENTIFY")) {
             // Check if user has selected the correct choice
             boolean answerIsCorrect = quiz.answerIsCorrect(displayedImage, selectedText);
-
             button.setText(R.string.next);
 
             // Show alert accordingly
             if (answerIsCorrect) {
                 int snackBarColor = getResources().getColor(R.color.correct);
                 showSnackBar(layout, "Correct!", snackBarColor);
-                stopTimer();
+                timer.stopTimer();
             } else {
                 button.setEnabled(false); // Disable button until correct answer is shown
-                stopTimer();
+                timer.stopTimer();
                 int snackBarColor = getResources().getColor(R.color.incorrect);
                 Snackbar snackbar = showSnackBar(layout, "Wrong!", snackBarColor);
                 snackbar.addCallback(new Snackbar.Callback() {
@@ -139,39 +162,6 @@ public class IdentifyCarMake extends AppCompatActivity implements AdapterView.On
             onCreateHelper();
         }
     }
-
-    public void startTimer() {
-        countDownTimer = new CountDownTimer(timeLeftInMilliSeconds, 1000) {
-            @Override
-            public void onTick(long millisUntilFinished) {
-                timeLeftInMilliSeconds = millisUntilFinished;
-                updateTimer();
-            }
-
-            @Override
-            public void onFinish() {
-                handleIdentify();
-            }
-        }.start();
-    }
-
-    public void stopTimer() {
-        countDownTimer.cancel();
-        timerRunning = false;
-    }
-
-    public void updateTimer() {
-        int seconds = (int)  timeLeftInMilliSeconds % 60000 / 1000;
-
-        countdownText.setTextColor(getResources().getColor(R.color.primaryColor));
-        String timeLeftText = "";
-        if (seconds <= 5)
-            countdownText.setTextColor(getResources().getColor(R.color.incorrect));
-        timeLeftText += seconds;
-
-        countdownText.setText(timeLeftText);
-    }
-
 
     // Utility method to create SnackBar
     private Snackbar showSnackBar(ConstraintLayout layout, String message, int snackBarColor) {

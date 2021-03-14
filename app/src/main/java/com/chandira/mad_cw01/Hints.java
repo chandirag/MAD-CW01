@@ -1,5 +1,6 @@
 package com.chandira.mad_cw01;
 
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -33,10 +34,7 @@ public class Hints extends AppCompatActivity {
     private final Quiz quiz = new Quiz();
 
     private TextView countdownText;
-    private CountDownTimer countDownTimer;
-    private long timeLeftInMilliSeconds = 21000;
-    private boolean timerRunning;
-    Timer timer;
+    private Timer timer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,20 +46,38 @@ public class Hints extends AppCompatActivity {
 
         countdownText = findViewById(R.id.timerText2);
 
-        timer = new Timer(7000);
-        timer.countDownTimer = new CountDownTimer(timer.getTimeLeftInMilliSeconds(), 1000) {
-            @RequiresApi(api = Build.VERSION_CODES.M)
-            @Override
-            public void onTick(long millisUntilFinished) {
-                timer.setTimeLeftInMilliSeconds(millisUntilFinished);
-                timer.updateTimer(countdownText, getColor(R.color.primaryColor), getColor(R.color.incorrect));
-            }
+        timer = new Timer();
 
-            @Override
-            public void onFinish() {
-                handleHintButtonClick();
-            }
-        }.start();
+        SharedPreferences state = getSharedPreferences("preferences", 0);
+        boolean switchState = state.getBoolean("switchState", false);
+        if (switchState) {
+            timer.countDownTimer = new CountDownTimer(timer.getTimeLeftInMilliSeconds(), 1000) {
+                @RequiresApi(api = Build.VERSION_CODES.M)
+                @Override
+                public void onTick(long millisUntilFinished) {
+                    timer.setTimeLeftInMilliSeconds(millisUntilFinished);
+                    timer.updateTimer(countdownText, getColor(R.color.primaryColor), getColor(R.color.incorrect));
+                }
+
+                @Override
+                public void onFinish() {
+                    handleHintButtonClick();
+                }
+            }.start();
+        } else {
+            timer.countDownTimer = new CountDownTimer(timer.getTimeLeftInMilliSeconds(), 1000) {
+                @Override
+                public void onTick(long millisUntilFinished) {
+                }
+
+                @Override
+                public void onFinish() {
+
+                }
+            };
+            countdownText.setVisibility(View.INVISIBLE);
+        }
+
         onCreateHelper();
     }
 
@@ -129,8 +145,12 @@ public class Hints extends AppCompatActivity {
                 // If it does exist: Do nothing
                 isGuessCorrect = true;
             }
+            timer.resetTimer();
 
-            if (!isGuessCorrect) incorrectGuesses++;
+            if (!isGuessCorrect) {
+                incorrectGuesses++;
+                timer.resetTimer();
+            }
 
             if (correctGuesses == lettersInCarMake.size()) {
                 showSnackBar(layout, "Correct!", getResources().getColor(R.color.correct));
@@ -161,7 +181,6 @@ public class Hints extends AppCompatActivity {
                 button.setText(R.string.next);
             }
             userInput.setText(""); // Clear EditText
-            timer.resetTimer();
         } else {
             timer.stopTimer();
             previousImage = displayedImage;

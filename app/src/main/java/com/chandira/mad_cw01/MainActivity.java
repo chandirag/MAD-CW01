@@ -38,6 +38,10 @@ public class MainActivity extends AppCompatActivity {
 
     public void launchHintActivity(View view) {
         Intent intent = new Intent(this, Hints.class);
+        SharedPreferences state = getSharedPreferences("preferences", 0);
+        SharedPreferences.Editor editor = state.edit();
+        editor.putBoolean("switchState", simpleSwitch.isChecked());
+        editor.commit();
         startActivity(intent);
     }
 
