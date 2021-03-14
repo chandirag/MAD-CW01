@@ -9,8 +9,6 @@ import java.util.Map;
 import java.util.Random;
 
 public class Quiz {
-    // TODO: Make fields private and create getters & setters
-
     private final int[] carImages = {R.drawable.audi, R.drawable.bmw, R.drawable.benz, R.drawable.nissan};
     private Map<Integer, String> cars;
 
